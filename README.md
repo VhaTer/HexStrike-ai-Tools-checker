@@ -1,53 +1,72 @@
-Here is the full version 4.0 of the HexStrike AI script, now covering 150+ cybersecurity tools, organized into 15+ detailed categories:
+## HexStrike AI Security Tools Checker `HexStrike.Tools.sh`
 
-# 🔥 New Features in v4.0:
+### Overview
 
-Extended Coverage (150+ tools):
+**HexStrike.Tools.sh** is a script for verifying, auditing, and validating the installation and accessibility of 150+ cybersecurity tools as listed in the HexStrike AI V6 README. It offers comprehensive coverage, ensuring your penetration testing and security analysis environment is properly equipped, and is enhanced for advanced exploitation and mobile security workflows.
 
-Mobile Security: apktool, jadx, frida, drozer, etc.
+## Features
 
-Hardware & IoT: firmadyne, binwalk, openocd, etc.
+- **Banner & UI:** Displays an eye-catching, colorized terminal banner for easy identification.
+- **Distribution Detection:** Automatically identifies your Linux distribution (Kali, Ubuntu, RHEL, etc.) for tailored tool verification.
+- **Download Link Validation:** Checks working download links for tools using `curl`.
+- **Comprehensive Tool Coverage:** Supports over 150 official HexStrike AI tools (network recon, exploitation, OSINT, mobile, etc.).
+- **Modular & Extensible:** Easily add new tools or verification steps.
 
-Radio & SDR: hackrf, rtl-sdr, gnuradio, etc.
+## Requirements
 
-Social Engineering: SET, gophish, evilginx2, etc.
+- Linux OS (Kali, Ubuntu, RHEL, Parrot, etc.)
+- Bash shell
+- `curl` (recommended for link verification)
 
-Enterprise & AD: bloodhound, powerview, mimikatz, etc.
+## Installation
 
-Cloud Security: prowler, trivy, kube-hunter, etc.
+Clone the repository:
+```bash
+git clone https://github.com/VhaTer/HexStrike-ai-Tools-checker.git
+cd HexStrike-ai-Tools-checker
+```
 
-CTF & Forensics: volatility, autopsy, steghide, etc.
+## Usage
 
- # 🚀 Technical Improvements:
+Run the script from your terminal:
+```bash
+chmod +x HexStrike.Tools.sh
+./HexStrike.Tools.sh
+```
 
-Advanced Detection: Checks in 15+ different locations
+## Output
 
-Categorization: Each tool is assigned to a specific category
+- summary of installed, missing, or deprecated security tools.
+- Status of download links for each tool.
+- Distribution and environment details.
 
-Verified Links: Automatic validation of download URLs
+## Customization
 
-Multi-Distro Support: Ubuntu, Debian, Kali, Fedora, CentOS, Arch, etc.
+- Add more tools to the verification list by editing the script.
+- Modify color schemes or banner text for branding.
+- Integrate additional validation logic as needed.
 
-Package Manager Installation: apt, dnf/yum, pacman, pip, go, npm, gem
+## Troubleshooting
 
-# 📊  Enhanced Analysis:
+- If colors do not display, ensure the script uses single-backslash escape codes (`\033`) and your terminal supports ANSI colors.
+- Make sure `curl` is installed for link checking (`sudo apt install curl`).
 
-Readiness Score: Coverage percentage with recommendations
+## Contributing
 
-Category Analysis: Detailed statistics by domain
+Pull requests, issues, and suggestions are welcome! Help expand the tool list or improve detection logic.
 
-Essential Tools: Top 20 critical tools for HexStrike AI
+## License
 
-AI Capabilities: Evaluation of automation possibilities
+MIT License. See [LICENSE](LICENSE) for details.
 
- # 🛠️ Full Deployment Guide:
+## Author
 
-10 detailed steps for complete deployment
+- [VhaTer](https://github.com/VhaTer)
 
-Advanced configuration using environment variables
+## References
 
-Performance tuning for large-scale evaluations
+- [HexStrike AI README](https://github.com/VhaTer/HexStrike-ai-Tools-checker)
+- [Kali Linux](https://www.kali.org/)
+- [curl documentation](https://curl.se/docs/manpage.html)
 
-Community resources and support
-
-This script fully coverage to include the 150+ tools listed in the HexStrike AI README.
+---
