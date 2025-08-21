@@ -50,4 +50,4 @@ Performance tuning for large-scale evaluations
 
 Community resources and support
 
-This script fully adheres to the style and structure of version 3, while massively expanding tool coverage to include the 150+ tools listed in the HexStrike AI README.
+This script fully coverage to include the 150+ tools listed in the HexStrike AI README.
