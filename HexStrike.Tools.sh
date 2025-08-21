@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# HexStrike AI - Official Tools Verification Script (Based on Official README)
+# HexStrike AI - Tools Verification Script (Based on Official HexStrike-Ai V6 README)
 # Supports multiple Linux distributions with verified download links
 # Version 4.0 - Complete coverage of all 150+ HexStrike AI tools
 
@@ -25,8 +25,8 @@ echo "██╔══██║██╔══╝   ██╔██╗ ╚══�
 echo "██║  ██║███████╗██╔╝ ██╗███████║   ██║   ██║  ██║██║██║  ██╗███████╗"
 echo "╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚══════╝   ╚═╝   ╚═╝  ╚═╝╚═╝╚═╝  ╚═╝╚══════╝"
 echo -e "${NC}"
-echo -e "${WHITE}${BOLD}HexStrike AI - Official Security Tools Checker v4.0${NC}"
-echo -e "${BLUE}🔗 Based on official HexStrike AI README - 150+ tools coverage${NC}"
+echo -e "${WHITE}${BOLD}HexStrike AI - Tools Checker v4.0${NC}"
+echo -e "${BLUE}🔗 Based on HexStrike-Ai V6 AI README - 150+ tools coverage${NC}"
 echo -e "${ORANGE}📋 Comprehensive verification with working download links${NC}"
 echo -e "${PURPLE}🚀 Enhanced with advanced exploitation and mobile security tools${NC}"
 echo ""
