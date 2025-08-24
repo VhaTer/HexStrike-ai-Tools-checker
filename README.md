@@ -31,20 +31,7 @@ chmod +x HexStrikeTools.sh
 ```bash
 bash HexStrikeTools.sh
 ```
-## 🎯 What You'll See
-
-1. **Professional Banner**: Clean HexStrike AI logo with borders
-2. **System Information**: Organized system details
-3. **Tool Categories**: Clear separation by security domain
-4. **Progress Tracking**: Visual progress bars during checking
-5. **Clean Status Display**: Easy-to-read tool status
-6. **Organized Summary**: Clear statistics and assessment
-7. **Missing Tools**: Organized by category
-8. **Installation Guidance**: Clear next steps
-
-
 ## 🤝 Contributing
-
 Contributions are welcome! Areas for improvement:
 
 - Add more tool categories
@@ -52,7 +39,7 @@ Contributions are welcome! Areas for improvement:
 - Improve color schemes
 - Add more installation methods
 - Enhance error handling
-
+- creat logs txt/csv/etc..
 ## 📄 License
 MIT License - same as the original project.
 
