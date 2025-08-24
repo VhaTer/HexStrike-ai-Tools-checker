@@ -18,20 +18,17 @@ HexStrike.Tools.sh is a script for verifying, auditing, and validating the insta
 git clone https://github.com/VhaTer/HexStrike-ai-Tools-checker.git
 cd HexStrike-ai-Tools-checker
 
-# Make the improved script executable
-chmod +x HexStrike.Tools.sh
+# Make the script executable
+chmod +x HexStrikeTools.sh
 ```
-
 ## 🚀 Usage
-
 ### Run the improved version:
 ```bash
-./HexStrike.Tools.Improved.sh
+./HexStrikeTools.sh
 ```
-
 ### Or run with bash explicitly:
 ```bash
-bash HexStrike.Tools.Improved.sh
+bash HexStrikeTools.sh
 ```
 ## 🎯 What You'll See
 
