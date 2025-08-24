@@ -1,8 +1,14 @@
-## HexStrike AI Tools Checker -
+# HexStrike AI Tools Checker v6.0 (V6 Complete Edition)
 
-### Overview
-Overview
-HexStrike.Tools.sh is a script for verifying, auditing, and validating the installation and accessibility of 150+ cybersecurity tools as listed in the HexStrike AI V6 README. It offers comprehensive coverage, ensuring your penetration testing and security analysis environment is properly equipped, and is enhanced for advanced exploitation and security workflows.
+## 🚀 Overview
+HexStrikeTools.sh is a comprehensive script for verifying, auditing, and validating the installation and accessibility of **200+ cybersecurity tools** as listed in the official HexStrike AI V6 README. This enhanced version provides complete alignment with HexStrike-ai V6 requirements, ensuring your penetration testing and security analysis environment is fully equipped for AI-powered security operations.
+
+### ✨ V6.0 Enhancements
+- **Complete V6 Alignment**: All missing tools from official HexStrike-ai V6 README added
+- **200+ Tools Coverage**: Expanded from 150+ to 200+ tools across 13 categories
+- **New Cryptography Category**: Added dedicated cryptography and hash analysis tools
+- **Enhanced Cloud Security**: Comprehensive cloud security tool coverage (25 tools)
+- **Advanced OSINT**: Extended OSINT capabilities with social media analysis tools
 
 
 ## 🛠️ Requirements
