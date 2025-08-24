@@ -519,12 +519,14 @@ main() {
     echo -e "${WHITE}${BOLD}🤖 READY TO EMPOWER YOUR AI AGENTS WITH AUTONOMOUS CYBERSECURITY CAPABILITIES!${NC}"
     echo ""
     echo -e "${CYAN}Remember: With great power comes great responsibility.${NC}"
-    echo -e "${CYAN}Use HexStrike AI ethically and only on systems you own or have explicit permission to test.${NC}"
+    echo -e "${CYAN}Use HexStrike AI ethically and only.${NC}"
+    echo -e "${CYAN}on systems you own or have explicit permission to test.${NC}"
     echo ""
     echo ""
     echo ""
     echo -e "${PURPLE}${BOLD}Happy Hacking with HexStrike AI! 🚀💀🔥${NC}"
     echo ""
+  
 }
 
 # Run main function
