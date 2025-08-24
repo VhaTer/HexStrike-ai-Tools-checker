@@ -13,12 +13,13 @@ HexStrike.Tools.sh is a script for verifying, auditing, and validating the insta
 
 ## 📥 Installation
 
-```bash
 # Clone the repository
+```bash
 git clone https://github.com/VhaTer/HexStrike-ai-Tools-checker.git
 cd HexStrike-ai-Tools-checker
-
+```
 # Make the script executable
+```
 chmod +x HexStrikeTools.sh
 ```
 ## 🚀 Usage
