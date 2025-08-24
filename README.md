@@ -1,7 +1,7 @@
 ## HexStrike AI Tools Checker -
 
 ### Overview
-Overview
+
 HexStrike.Tools.sh is a script for verifying, auditing, and validating the installation and accessibility of 150+ cybersecurity tools as listed in the HexStrike AI V6 README. It offers comprehensive coverage, ensuring your penetration testing and security analysis environment is properly equipped, and is enhanced for advanced exploitation and security workflows.
 
 
