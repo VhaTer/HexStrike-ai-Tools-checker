@@ -1,73 +1,241 @@
-# HexStrike AI Tools Checker v6.0 (V6 Complete Edition)
+# 🤖 HexStrike AI Tools Checker v6.0
 
-## 🚀 Overview
-HexStrikeTools.sh is a comprehensive script for verifying, auditing, and validating the installation and accessibility of **200+ cybersecurity tools** as listed in the official HexStrike AI V6 README. This enhanced version provides complete alignment with HexStrike-ai V6 requirements, ensuring your penetration testing and security analysis environment is fully equipped for AI-powered security operations.
+> **🎯 Cyberpunk-themed security tools validator for HexStrike AI V6**
 
-### ✨ V6.0 Enhancements
-- **Complete V6 Alignment**: All missing tools from official HexStrike-ai V6 README added
-- **200+ Tools Coverage**: Expanded from 150+ to 200+ tools across 13 categories
-- **New Cryptography Category**: Added dedicated cryptography and hash analysis tools
-- **Enhanced Cloud Security**: Comprehensive cloud security tool coverage (25 tools)
-- **Advanced OSINT**: Extended OSINT capabilities with social media analysis tools
+## 🚀 Quick Start
 
+```bash
+# Clone and run
+git clone https://github.com/VhaTer/HexStrike-ai-Tools-checker.git
+cd HexStrike-ai-Tools-checker
+chmod +x HexStrikeTools.sh
+./HexStrikeTools.sh
+```
+
+## ✨ Features
+
+- 🎨 **Cyberpunk Interface** - Matrix rain, neon colors, holographic effects
+- 🔧 **245+ Security Tools** - Complete HexStrike AI V6 compatibility  
+- 🐧 **Kali Optimized** - Most tools via `sudo apt install`
+- 📊 **Smart Progress** - Real-time scanning with visual feedback
+- 🛠️ **Auto Commands** - Ready-to-run installation instructions
+
+## 🛠️ Tool Categories
+
+<details>
+<summary>🌐 <strong>Network Reconnaissance</strong> (47 tools)</summary>
+
+```diff
++ nmap, masscan, amass, subfinder, nuclei, rustscan, naabu
++ httpx, assetfinder, sublist3r, knockpy, gobuster, ffuf
++ dirb, dirbuster, wfuzz, feroxbuster, dirsearch, whatweb
++ wafw00f, eyewitness, aquatone, gowitness, httprobe
++ waybackurls, autorecon, arp-scan, nbtscan, rpcclient
++ enum4linux, enum4linux-ng, smbmap, netexec, katana
++ hakrawler, gau, paramspider, x8, jaeles, dalfox
++ testssl, sslscan, sslyze, anew, qsreplace, uro, jwt-tool
+```
+</details>
+
+<details>
+<summary>🌐 <strong>Web Application Security</strong> (23 tools)</summary>
+
+```diff
++ sqlmap, wpscan, zaproxy, arjun, nikto, uniscan
++ skipfish, w3af, burpsuite, commix, xsser, sqlninja
++ jsql-injection, wapiti, cadaver, davtest, padbuster
++ joomscan, droopescan, cmsmap, nosqlmap, tplmap
++ graphql-voyager
+```
+</details>
+
+<details>
+<summary>🔐 <strong>Password & Authentication</strong> (18 tools)</summary>
+
+```diff
++ hydra, john, hashcat, medusa, patator, crackmapexec
++ ncrack, crowbar, brutespray, thc-hydra, ophcrack
++ rainbowcrack, hashcat-utils, pack, kwprocessor
++ hash-identifier, hashid, crackstation
+```
+</details>
+
+<details>
+<summary>🔬 <strong>Binary Analysis & Reverse Engineering</strong> (28 tools)</summary>
+
+```diff
++ gdb, radare2, binwalk, checksec, strings, objdump
++ xxd, hexdump, ghidra, ida-free, cutter, pwntools
++ ropper, one-gadget, peda, gef, pwngdb, voltron
++ gdb-peda, gdb-gef, binary-ninja, ropgadget, angr
++ libc-database, pwninit, upx, readelf, cyberchef
+```
+</details>
+
+<details>
+<summary>🔍 <strong>Forensics & Analysis</strong> (17 tools)</summary>
+
+```diff
++ volatility3, autopsy, bulk-extractor, scalpel, testdisk
++ dc3dd, ddrescue, foremost, photorec, sleuthkit
++ afflib-tools, libewf-tools, steghide, stegsolve
++ zsteg, outguess, exiftool
+```
+</details>
+
+<details>
+<summary>📡 <strong>Wireless & Network Security</strong> (15 tools)</summary>
+
+```diff
++ aircrack-ng, reaver, wifite, kismet, wireshark
++ tshark, tcpdump, ettercap, bettercap, hostapd
++ dnsmasq, macchanger, mdk3, mdk4, pixiewps
+```
+</details>
+
+<details>
+<summary>📱 <strong>Mobile & Hardware Security</strong> (13 tools)</summary>
+
+```diff
++ aapt, adb, fastboot, usbmuxd, libimobiledevice-utils
++ apktool, dex2jar, jd-gui, jadx, frida
++ objection, drozer, evil-winrm
+```
+</details>
+
+<details>
+<summary>💥 <strong>Exploitation Tools</strong> (15 tools)</summary>
+
+```diff
++ metasploit-framework, msfvenom, msfconsole, searchsploit
++ exploit-db, beef-xss, armitage, cobalt-strike, empire
++ powersploit, mimikatz, responder, impacket
++ bloodhound, powerview
+```
+</details>
+
+<details>
+<summary>🕵️ <strong>Information Gathering (OSINT)</strong> (16 tools)</summary>
+
+```diff
++ theharvester, recon-ng, maltego, spiderfoot, shodan
++ censys-python, fierce, dnsrecon, dnsenum, dmitry
++ sherlock, social-analyzer, pipl, trufflehog
++ have-i-been-pwned, subjack
+```
+</details>
+
+<details>
+<summary>🎯 <strong>Post-Exploitation</strong> (8 tools)</summary>
+
+```diff
++ linpeas, winpeas, linenum, linux-exploit-suggester
++ windows-exploit-suggester, privesc-check
++ unix-privesc-check, gtfoblookup
+```
+</details>
+
+<details>
+<summary>☁️ <strong>Cloud Security</strong> (25 tools)</summary>
+
+```diff
++ aws-cli, azure-cli, gcloud, kubectl, docker, trivy
++ cloudsplaining, pacu, prowler, scout-suite, cloudmapper
++ clair, kube-hunter, kube-bench, docker-bench-security
++ falco, checkov, terrascan, cloudsploit, helm
++ istio, opa, volatility, msfvenom-cloud, cloudgoat
+```
+</details>
+
+<details>
+<summary>🛠️ <strong>System Utilities</strong> (12 tools)</summary>
+
+```diff
++ curl, wget, git, vim, nano, tmux
++ screen, htop, iotop, netstat, ss, lsof
++ strace, ltrace, ncat, socat
+```
+</details>
+
+<details>
+<summary>🔐 <strong>Cryptography & Hash Analysis</strong> (8 tools)</summary>
+
+```diff
++ cipher-identifier, frequency-analysis, rsatool, factordb
++ hashcat-legacy, hash-buster, findmyhash, hash-analyzer
+```
+</details>
+
+
+## 🎯 Sample Output
+
+```ansi
+[36m╔══════════════════════════════════════════════════════════════════════╗[0m
+[36m║[0m [1;32m🤖 HexStrike AI - Tools Checker v6.0[0m                        [36m║[0m
+[36m║[0m [35m🔗 Cyberpunk Security Tools Verification[0m                     [36m║[0m
+[36m╚══════════════════════════════════════════════════════════════════════╝[0m
+
+[1;36m🌐 Network Reconnaissance[0m
+  [32m✅ nmap[0m                    [1;32mINSTALLED[0m    [32m[████████████████████][0m 100%
+  [31m❌ masscan[0m                 [1;31mMISSING[0m      [32m[████████████████░░░░][0m 95%
+  
+[1;36m📋 Installation Commands:[0m
+[1;32m🔧 APT (System Packages):[0m
+[1msudo apt update && sudo apt install -y masscan nuclei subfinder[0m
+
+[1;33m🐹 GO (Go Packages):[0m
+[1mgo install github.com/projectdiscovery/nuclei/v2/cmd/nuclei@latest[0m
+```
 
 ## 🛠️ Requirements
 
-- Linux OS (Kali, Ubuntu, RHEL, Parrot, etc.)
-- Bash shell
-- `curl` (recommended for link verification)
+- **OS**: Linux (Kali recommended)
+- **Shell**: Bash 4.0+
+- **Network**: Internet connection
 
-## 📥 Installation
+## 🎯 HexStrike AI Integration
 
-```bash
-# Clone the repository
-git clone https://github.com/VhaTer/HexStrike-ai-Tools-checker.git
-cd HexStrike-ai-Tools-checker
+Prepares your environment for **HexStrike AI V6** autonomous penetration testing:
 
-# Make the script executable
-chmod +x HexStrikeTools.sh
-```
-## 🚀 Usage
-### Run the improved version:
-```bash
-./HexStrikeTools.sh
-```
-### Or run with bash explicitly:
-```bash
-bash HexStrikeTools.sh
-```
-## 🎯 What You'll See
-
-1. **Professional Banner**: Clean HexStrike AI logo with borders
-2. **System Information**: Organized system details
-3. **Tool Categories**: Clear separation by security domain
-4. **Progress Tracking**: Visual progress bars during checking
-5. **Clean Status Display**: Easy-to-read tool status
-6. **Organized Summary**: Clear statistics and assessment
-7. **Missing Tools**: Organized by category
-8. **Installation Guidance**: Clear next steps
-
+- 🤖 **AI-Powered Testing** - Intelligent vulnerability discovery
+- 🏆 **Bug Bounty Automation** - Automated exploitation workflows  
+- ☁️ **Cloud Security** - Multi-cloud assessment capabilities
+- 📱 **Mobile Testing** - Android/iOS security analysis
 
 ## 🤝 Contributing
 
-Contributions are welcome! Areas for improvement:
-
-- Add more tool categories
-- Enhance progress tracking
-- Improve color schemes
-- Add more installation methods
-- Enhance error handling
+```bash
+# Fork → Feature → Test → PR
+git checkout -b feature/new-tool-support
+```
 
 ## 📄 License
-MIT License - same as the original project.
 
-## 👨‍💻 Author
-- [VhaTer](https://github.com/VhaTer) 
+MIT License
+
+## 👨‍💻 Credits
+
+- **Developer**: [VhaTer](https://github.com/VhaTer)
+- **Based on**: [HexStrike AI V6](https://github.com/0x4m4/hexstrike-ai)
+
 ---
 
-                            
-                            "ETHICAL USE NOTICE"
-                            ⚠️ "With great power comes great responsibility." ⚠️
-                            "Use HexStrike AI ethically - Authorized systems only."
-                                *in other words dont fuck with internet* 
-                            
+## ⚠️ Ethical Use
+
+> **🛡️ "With great power comes great responsibility."**
+
+```diff
++ ✅ Authorized testing only
++ ✅ Respect bug bounty rules  
++ ✅ Responsible disclosure
+
+- ❌ Unauthorized access
+- ❌ Malicious activities
+- ❌ Legal violations
+```
+
+**Educational Purpose**: Cybersecurity education, authorized testing, and improving security posture.
+
+---
+
+*🤖 Ready to empower your AI agents with autonomous cybersecurity capabilities!*
