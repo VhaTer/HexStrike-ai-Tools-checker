@@ -1,6 +1,5 @@
 # 🤖 HexStrike AI Tools Checker v6.0
 
-> **🎯 Cyberpunk-themed security tools validator for HexStrike AI V6**
 
 ## 🚀 Quick Start
 
@@ -11,15 +10,6 @@ cd HexStrike-ai-Tools-checker
 chmod +x HexStrikeTools.sh
 ./HexStrikeTools.sh
 ```
-
-## ✨ Features
-
-- 🎨 **Cyberpunk Interface** - Matrix rain, neon colors, holographic effects
-- 🔧 **245+ Security Tools** - Complete HexStrike AI V6 compatibility  
-- 🐧 **Kali Optimized** - Most tools via `sudo apt install`
-- 📊 **Smart Progress** - Real-time scanning with visual feedback
-- 🛠️ **Auto Commands** - Ready-to-run installation instructions
-
 ## 🛠️ Tool Categories
 
 <details>
@@ -166,27 +156,6 @@ chmod +x HexStrikeTools.sh
 ```
 </details>
 
-
-## 🎯 Sample Output
-
-```ansi
-[36m╔══════════════════════════════════════════════════════════════════════╗[0m
-[36m║[0m [1;32m🤖 HexStrike AI - Tools Checker v6.0[0m                        [36m║[0m
-[36m║[0m [35m🔗 Cyberpunk Security Tools Verification[0m                     [36m║[0m
-[36m╚══════════════════════════════════════════════════════════════════════╝[0m
-
-[1;36m🌐 Network Reconnaissance[0m
-  [32m✅ nmap[0m                    [1;32mINSTALLED[0m    [32m[████████████████████][0m 100%
-  [31m❌ masscan[0m                 [1;31mMISSING[0m      [32m[████████████████░░░░][0m 95%
-  
-[1;36m📋 Installation Commands:[0m
-[1;32m🔧 APT (System Packages):[0m
-[1msudo apt update && sudo apt install -y masscan nuclei subfinder[0m
-
-[1;33m🐹 GO (Go Packages):[0m
-[1mgo install github.com/projectdiscovery/nuclei/v2/cmd/nuclei@latest[0m
-```
-
 ## 🛠️ Requirements
 
 - **OS**: Linux (Kali recommended)
@@ -215,7 +184,7 @@ MIT License
 
 ## 👨‍💻 Credits
 
-- **Developer**: [VhaTer](https://github.com/VhaTer)
+- **VhaTer Noob with tools**: [VhaTer](https://github.com/VhaTer)
 - **Based on**: [HexStrike AI V6](https://github.com/0x4m4/hexstrike-ai)
 
 ---
