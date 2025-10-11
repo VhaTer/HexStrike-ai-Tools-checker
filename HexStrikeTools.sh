@@ -184,17 +184,49 @@ TOTAL_COUNT=0
 MISSING_TOOLS=()
 INSTALLED_TOOLS=()
 
+# Centralized Tool Definitions
+declare -A TOOLS
+TOOLS=(
+    ["Network Reconnaissance"]="nmap masscan amass subfinder nuclei rustscan naabu httpx assetfinder sublist3r knockpy gobuster ffuf dirb dirbuster wfuzz feroxbuster dirsearch whatweb wafw00f eyewitness aquatone gowitness httprobe waybackurls autorecon arp-scan nbtscan rpcclient enum4linux enum4linux-ng smbmap netexec katana hakrawler gau paramspider x8 jaeles dalfox testssl sslscan sslyze anew qsreplace uro jwt-tool"
+    ["Web Application Security"]="sqlmap wpscan zaproxy arjun nikto uniscan skipfish w3af burpsuite commix xsser sqlninja jsql-injection wapiti cadaver davtest padbuster joomscan droopescan cmsmap nosqlmap tplmap graphql-voyager"
+    ["Password & Authentication"]="hydra john hashcat medusa patator crackmapexec ncrack crowbar brutespray thc-hydra ophcrack rainbowcrack hashcat-utils pack kwprocessor hash-identifier hashid crackstation"
+    ["Binary Analysis & Reverse Engineering"]="gdb radare2 binwalk checksec strings objdump xxd hexdump ghidra ida-free cutter pwntools ropper one-gadget peda gef pwngdb voltron gdb-peda gdb-gef binary-ninja ropgadget angr libc-database pwninit upx readelf cyberchef"
+    ["Forensics & Analysis"]="volatility3 autopsy bulk-extractor scalpel testdisk dc3dd ddrescue foremost photorec sleuthkit afflib-tools libewf-tools steghide stegsolve zsteg outguess exiftool"
+    ["Wireless & Network Security"]="aircrack-ng reaver wifite kismet wireshark tshark tcpdump ettercap bettercap hostapd dnsmasq macchanger mdk3 mdk4 pixiewps"
+    ["Mobile & Hardware Security"]="aapt adb fastboot usbmuxd libimobiledevice-utils apktool dex2jar jd-gui jadx frida objection drozer evil-winrm"
+    ["Exploitation Tools"]="metasploit-framework msfvenom msfconsole searchsploit exploit-db beef-xss armitage cobalt-strike empire powersploit mimikatz responder impacket bloodhound powerview"
+    ["Information Gathering (OSINT)"]="theharvester recon-ng maltego spiderfoot shodan censys-python fierce dnsrecon dnsenum dmitry sherlock social-analyzer pipl trufflehog have-i-been-pwned subjack"
+    ["Post-Exploitation"]="linpeas winpeas linenum linux-exploit-suggester windows-exploit-suggester privesc-check unix-privesc-check gtfoblookup"
+    ["Cloud Security"]="aws-cli azure-cli gcloud kubectl docker trivy cloudsplaining pacu prowler scout-suite cloudmapper clair kube-hunter kube-bench docker-bench-security falco checkov terrascan cloudsploit helm istio opa volatility msfvenom-cloud cloudgoat"
+    ["System Utilities"]="curl wget git vim nano tmux screen htop iotop netstat ss lsof strace ltrace ncat socat"
+    ["Cryptography & Hash Analysis"]="cipher-identifier frequency-analysis rsatool factordb hashcat-legacy hash-buster findmyhash hash-analyzer"
+)
+
+declare -A TOOL_LINKS
+TOOL_LINKS=(
+    ["nmap"]="https://nmap.org/download.html"
+    ["masscan"]="https://github.com/robertdavidgraham/masscan"
+    ["amass"]="https://github.com/OWASP/Amass/wiki/Installation-Guide"
+    ["sqlmap"]="https://github.com/sqlmapproject/sqlmap"
+    ["wpscan"]="https://wpscan.com/how-to-install-wpscan/"
+    ["zaproxy"]="https://www.zaproxy.org/download/"
+    ["hydra"]="https://www.ssec.wisc.edu/hydra/download.html"
+    ["john"]="https://www.openwall.com/john/"
+    ["hashcat"]="https://hashcat.net/hashcat/"
+    ["radare2"]="https://rada.re/n/radare2.html"
+    ["binwalk"]="https://github.com/ReFirmLabs/binwalk"
+    ["ghidra"]="https://ghidra-sre.org/"
+    ["theharvester"]="https://github.com/laramies/theHarvester"
+    ["recon-ng"]="https://github.com/lanmaster53/recon-ng"
+    ["maltego"]="https://www.maltego.com/downloads/"
+)
+
 # Tool categorization arrays for package managers
 APT_TOOLS=("nmap" "masscan" "gobuster" "ffuf" "dirb" "dirbuster" "wfuzz" "feroxbuster" "dirsearch" "whatweb" "wafw00f" "eyewitness" "sqlmap" "wpscan" "zaproxy" "arjun" "nikto" "uniscan" "skipfish" "w3af" "commix" "xsser" "sqlninja" "jsql-injection" "wapiti" "cadaver" "davtest" "padbuster" "joomscan" "droopescan" "cmsmap" "nosqlmap" "tplmap" "hydra" "john" "hashcat" "medusa" "patator" "crackmapexec" "ncrack" "crowbar" "brutespray" "thc-hydra" "ophcrack" "rainbowcrack" "hashcat-utils" "pack" "kwprocessor" "hash-identifier" "hashid" "crackstation" "gdb" "radare2" "binwalk" "checksec" "strings" "objdump" "xxd" "hexdump" "ropper" "ropgadget" "upx" "readelf" "volatility3" "autopsy" "bulk-extractor" "scalpel" "testdisk" "dc3dd" "ddrescue" "foremost" "photorec" "sleuthkit" "afflib-tools" "libewf-tools" "steghide" "stegsolve" "zsteg" "outguess" "exiftool" "aircrack-ng" "reaver" "wifite" "kismet" "wireshark" "tshark" "tcpdump" "ettercap" "bettercap" "hostapd" "dnsmasq" "macchanger" "mdk3" "mdk4" "pixiewps" "aapt" "adb" "fastboot" "usbmuxd" "libimobiledevice-utils" "apktool" "dex2jar" "jd-gui" "jadx" "frida" "objection" "drozer" "metasploit-framework" "msfvenom" "msfconsole" "searchsploit" "exploit-db" "beef-xss" "armitage" "responder" "impacket" "theharvester" "recon-ng" "maltego" "spiderfoot" "fierce" "dnsrecon" "dnsenum" "dmitry" "sherlock" "linpeas" "winpeas" "linenum" "linux-exploit-suggester" "windows-exploit-suggester" "privesc-check" "unix-privesc-check" "gtfoblookup" "docker" "docker.io" "kubectl" "helm" "curl" "wget" "git" "vim" "nano" "tmux" "screen" "htop" "iotop" "netstat" "ss" "lsof" "strace" "ltrace" "ncat" "socat" "netcat" "enum4linux" "enum4linux-ng" "smbmap" "netexec" "testssl" "sslscan" "sslyze" "sublist3r" "knockpy" "awscli" "google-cloud-sdk" "trivy" "falco")
-
 SNAP_TOOLS=("amass" "bloodhound" "code" "ghidra" "ida-free" "cutter" "binary-ninja")
-
 PIP_TOOLS=("shodan" "censys" "social-analyzer" "have-i-been-pwned" "trufflehog" "subjack" "cloudsplaining" "pacu" "prowler" "scout-suite" "cloudmapper" "checkov" "terrascan" "cloudsploit" "pwntools" "one-gadget" "angr" "pwninit" "autorecon" "jwt-tool" "graphql-voyager" "peda" "gef" "pwngdb" "voltron" "gdb-peda" "gdb-gef" "libc-database" "cipher-identifier" "frequency-analysis" "rsatool" "factordb" "hashcat-legacy" "hash-buster" "findmyhash" "hash-analyzer")
-
 GEM_TOOLS=("wpscan")
-
 GO_TOOLS=("rustscan" "naabu" "assetfinder" "subfinder" "nuclei" "httpx" "katana" "hakrawler" "gau" "paramspider" "x8" "jaeles" "dalfox" "anew" "qsreplace" "uro" "waybackurls" "httprobe" "gowitness" "aquatone" "kube-hunter" "kube-bench")
-
 CUSTOM_TOOLS=("cobalt-strike" "empire" "powersploit" "mimikatz" "powerview" "ida-free" "cutter" "binary-ninja" "angr" "libc-database" "pwninit" "cyberchef" "stegsolve" "zsteg" "one-gadget" "peda" "gef" "pwngdb" "voltron" "pwntools" "aws-cli" "azure-cli" "gcloud" "clair" "docker-bench-security" "istio" "opa" "volatility" "msfvenom-cloud" "cloudgoat" "cipher-identifier" "frequency-analysis" "rsatool" "factordb" "hashcat-legacy" "hash-buster" "findmyhash" "hash-analyzer")
 
 # Check if curl is available
@@ -396,61 +428,11 @@ show_system_info() {
 
 # Calculate total number of tools (EXPANDED LIST - V6 COMPLETE)
 calculate_total_tools() {
-    # Network Reconnaissance & Scanning (47 tools - expanded from 25)
-    local network_tools=("nmap" "amass" "subfinder" "nuclei" "masscan" "rustscan" "naabu" "httpx" "assetfinder" "sublist3r" "knockpy" "gobuster" "ffuf" "dirb" "dirbuster" "wfuzz" "feroxbuster" "dirsearch" "whatweb" "wafw00f" "eyewitness" "aquatone" "gowitness" "httprobe" "waybackurls" "autorecon" "arp-scan" "nbtscan" "rpcclient" "enum4linux" "enum4linux-ng" "smbmap" "netexec" "katana" "hakrawler" "gau" "paramspider" "x8" "jaeles" "dalfox" "testssl" "sslscan" "sslyze" "anew" "qsreplace" "uro" "jwt-tool")
-    
-    # Web Application Security (23 tools - expanded from 20)
-    local web_tools=("sqlmap" "wpscan" "zaproxy" "arjun" "nikto" "uniscan" "skipfish" "w3af" "burpsuite" "commix" "xsser" "sqlninja" "jsql-injection" "wapiti" "cadaver" "davtest" "padbuster" "joomscan" "droopescan" "cmsmap" "nosqlmap" "tplmap" "graphql-voyager")
-    
-    # Password & Authentication (18 tools - expanded from 15)
-    local auth_tools=("hydra" "john" "hashcat" "medusa" "patator" "crackmapexec" "ncrack" "crowbar" "brutespray" "thc-hydra" "ophcrack" "rainbowcrack" "hashcat-utils" "pack" "kwprocessor" "hash-identifier" "hashid" "crackstation")
-    
-    # Binary Analysis & Reverse Engineering (28 tools - expanded from 18)
-    local binary_tools=("gdb" "radare2" "binwalk" "checksec" "strings" "objdump" "xxd" "hexdump" "ghidra" "ida-free" "cutter" "pwntools" "ropper" "one-gadget" "peda" "gef" "pwngdb" "voltron" "gdb-peda" "gdb-gef" "binary-ninja" "ropgadget" "angr" "libc-database" "pwninit" "upx" "readelf" "cyberchef")
-    
-    # Forensics & Analysis (17 tools - expanded from 12)
-    local forensics_tools=("volatility3" "autopsy" "bulk-extractor" "scalpel" "testdisk" "dc3dd" "ddrescue" "foremost" "photorec" "sleuthkit" "afflib-tools" "libewf-tools" "steghide" "stegsolve" "zsteg" "outguess" "exiftool")
-    
-    # Wireless & Network Security (15 tools - unchanged)
-    local wireless_tools=("aircrack-ng" "reaver" "wifite" "kismet" "wireshark" "tshark" "tcpdump" "ettercap" "bettercap" "hostapd" "dnsmasq" "macchanger" "mdk3" "mdk4" "pixiewps")
-    
-    # Mobile & Hardware Security (13 tools - expanded from 12)
-    local mobile_tools=("aapt" "adb" "fastboot" "usbmuxd" "libimobiledevice-utils" "apktool" "dex2jar" "jd-gui" "jadx" "frida" "objection" "drozer" "evil-winrm")
-    
-    # Exploitation Tools (15 tools - unchanged)
-    local exploit_tools=("metasploit-framework" "msfvenom" "msfconsole" "searchsploit" "exploit-db" "beef-xss" "armitage" "cobalt-strike" "empire" "powersploit" "mimikatz" "responder" "impacket" "bloodhound" "powerview")
-    
-    # Information Gathering (16 tools - expanded from 10)
-    local osint_tools=("theHarvester" "recon-ng" "maltego" "spiderfoot" "shodan" "censys-python" "fierce" "dnsrecon" "dnsenum" "dmitry" "sherlock" "social-analyzer" "pipl" "trufflehog" "have-i-been-pwned" "subjack")
-    
-    # Post-Exploitation (8 tools - unchanged)
-    local post_exploit_tools=("linpeas" "winpeas" "linenum" "linux-exploit-suggester" "windows-exploit-suggester" "privesc-check" "unix-privesc-check" "gtfoblookup")
-    
-    # Cloud Security (25 tools - expanded from 8)
-    local cloud_tools=("aws-cli" "azure-cli" "gcloud" "kubectl" "docker" "trivy" "cloudsplaining" "pacu" "prowler" "scout-suite" "cloudmapper" "clair" "kube-hunter" "kube-bench" "docker-bench-security" "falco" "checkov" "terrascan" "cloudsploit" "helm" "istio" "opa" "volatility" "msfvenom-cloud" "cloudgoat")
-    
-    # Cryptography & Hash Analysis (8 tools - new category)
-    local crypto_tools=("cipher-identifier" "frequency-analysis" "rsatool" "factordb" "hashcat-legacy" "hash-buster" "findmyhash" "hash-analyzer")
-    
-    # System Utilities (12 tools - unchanged)
-    local system_tools=("tmux" "screen" "htop" "iotop" "netstat" "ss" "lsof" "strace" "ltrace" "gdb" "ncat" "socat")
-    
-    # Calculate total count
-    TOTAL_COUNT=$((
-        ${#network_tools[@]} + 
-        ${#web_tools[@]} + 
-        ${#auth_tools[@]} + 
-        ${#binary_tools[@]} + 
-        ${#forensics_tools[@]} + 
-        ${#wireless_tools[@]} + 
-        ${#mobile_tools[@]} + 
-        ${#exploit_tools[@]} + 
-        ${#osint_tools[@]} + 
-        ${#post_exploit_tools[@]} + 
-        ${#cloud_tools[@]} + 
-        ${#crypto_tools[@]} + 
-        ${#system_tools[@]}
-    ))
+    TOTAL_COUNT=0
+    for category in "${!TOOLS[@]}"; do
+        local tools_in_category=(${TOOLS[$category]})
+        TOTAL_COUNT=$((TOTAL_COUNT + ${#tools_in_category[@]}))
+    done
 }
 
 # Display tool status without progress bar interference
@@ -590,60 +572,20 @@ show_summary() {
     declare -A category_missing
     
     # Initialize category counts
-    category_totals["Network Reconnaissance"]=19
-    category_totals["Web Application Security"]=23
-    category_totals["Password & Authentication"]=18
-    category_totals["Binary Analysis & Reverse Engineering"]=28
-    category_totals["Forensics & Analysis"]=17
-    category_totals["Wireless & Network Security"]=15
-    category_totals["Mobile & Hardware Security"]=13
-    category_totals["Exploitation Tools"]=15
-    category_totals["Information Gathering (OSINT)"]=16
-    category_totals["Post-Exploitation"]=8
-    category_totals["Cloud Security"]=25
-    category_totals["System Utilities"]=12
-    category_totals["Cryptography & Hash Analysis"]=8
-    
-    # Count missing tools by category
-    for category in "${!category_totals[@]}"; do
+    for category in "${!TOOLS[@]}"; do
+        local tools_in_category=(${TOOLS[$category]})
+        category_totals["$category"]=${#tools_in_category[@]}
         category_missing["$category"]=0
     done
     
     # Count missing tools for each category
-    for tool in "${MISSING_TOOLS[@]}"; do
-        # Determine category based on tool name (simplified approach)
-        case "$tool" in
-            nmap|masscan|amass|subfinder|nuclei|rustscan|naabu|httpx|assetfinder|sublist3r|knockpy|gobuster|ffuf|dirb|dirbuster|wfuzz|feroxbuster|dirsearch|whatweb)
-                ((category_missing["Network Reconnaissance"]++)) ;;
-            sqlmap|wpscan|zaproxy|arjun|nikto|uniscan|skipfish|w3af|burpsuite|commix|xsser|sqlninja|jsql-injection|wapiti|cadaver|davtest|padbuster|joomscan|droopescan|cmsmap|nosqlmap|tplmap|graphql-voyager)
-                ((category_missing["Web Application Security"]++)) ;;
-            hydra|john|hashcat|medusa|patator|crackmapexec|ncrack|crowbar|brutespray|thc-hydra|ophcrack|rainbowcrack|hashcat-utils|pack|kwprocessor|hash-identifier|hashid|crackstation)
-                ((category_missing["Password & Authentication"]++)) ;;
-            gdb|radare2|binwalk|checksec|strings|objdump|xxd|hexdump|ghidra|ida-free|cutter|pwntools|ropper|one-gadget|peda|gef|pwngdb|voltron|gdb-peda|gdb-gef|binary-ninja|ropgadget|angr|libc-database|pwninit|upx|readelf|cyberchef)
-                ((category_missing["Binary Analysis & Reverse Engineering"]++)) ;;
-            volatility3|autopsy|bulk-extractor|scalpel|testdisk|dc3dd|ddrescue|foremost|photorec|sleuthkit|afflib-tools|libewf-tools|steghide|stegsolve|zsteg|outguess|exiftool)
-                ((category_missing["Forensics & Analysis"]++)) ;;
-            aircrack-ng|reaver|wifite|kismet|wireshark|tshark|tcpdump|ettercap|bettercap|hostapd|dnsmasq|macchanger|mdk3|mdk4|pixiewps)
-                ((category_missing["Wireless & Network Security"]++)) ;;
-            aapt|adb|fastboot|usbmuxd|libimobiledevice-utils|apktool|dex2jar|jd-gui|jadx|frida|objection|drozer|evil-winrm)
-                ((category_missing["Mobile & Hardware Security"]++)) ;;
-            metasploit-framework|msfvenom|msfconsole|searchsploit|exploit-db|beef-xss|armitage|cobalt-strike|empire|powersploit|mimikatz|responder|impacket|bloodhound|powerview)
-                ((category_missing["Exploitation Tools"]++)) ;;
-            theHarvester|recon-ng|maltego|spiderfoot|shodan|censys-python|fierce|dnsrecon|dnsenum|dmitry|sherlock|social-analyzer|pipl|trufflehog|have-i-been-pwned|subjack)
-                ((category_missing["Information Gathering (OSINT)"]++)) ;;
-            linpeas|winpeas|linenum|linux-exploit-suggester|windows-exploit-suggester|privesc-check|unix-privesc-check|gtfoblookup)
-                ((category_missing["Post-Exploitation"]++)) ;;
-            aws-cli|azure-cli|gcloud|kubectl|docker|trivy|cloudsplaining|pacu|prowler|scout-suite|cloudmapper|clair|kube-hunter|kube-bench|docker-bench-security|falco|checkov|terrascan|cloudsploit|helm|istio|opa|volatility|msfvenom-cloud|cloudgoat)
-                ((category_missing["Cloud Security"]++)) ;;
-            curl|wget|git|vim|nano|tmux|htop|netstat|ss|ncat|socat|netcat)
-                ((category_missing["System Utilities"]++)) ;;
-            cipher-identifier|frequency-analysis|rsatool|factordb|hashcat-legacy|hash-buster|findmyhash|hash-analyzer)
-                ((category_missing["Cryptography & Hash Analysis"]++)) ;;
-        esac
+    for tool_info in "${MISSING_TOOLS[@]}"; do
+        local category="${tool_info#*:}"
+        ((category_missing["$category"]++))
     done
     
     # Calculate installed counts and display
-    for category in "${!category_totals[@]}"; do
+    for category in "${!TOOLS[@]}"; do
         total=${category_totals["$category"]}
         missing=${category_missing["$category"]}
         installed=$((total - missing))
@@ -681,10 +623,17 @@ show_summary() {
     # Missing tools section
     if [ ${#MISSING_TOOLS[@]} -gt 0 ]; then
         echo -e "\n  ${BOLD}🔍 Missing Tools (${#MISSING_TOOLS[@]}):${NC}"
+        printf "\n  %-30s %-10s %-50s\n" "Tool" "Status" "Installation Link"
+        printf "  %-30s %-10s %-50s\n" "----" "------" "-------------------"
         local count=0
         for tool_info in "${MISSING_TOOLS[@]}"; do
-            IFS='|' read -r tool_name category <<< "$tool_info"
-            printf "  ${CROSS_MARK} %-30s ${DIM}%s${NC}\n" "$tool_name" "($category)"
+            local tool_name="${tool_info%%:*}"
+            local category="${tool_info#*:}"
+            local link=${TOOL_LINKS[$tool_name]}
+            if [ -z "$link" ]; then
+                link="N/A"
+            fi
+            printf "  ${CROSS_MARK} %-30s ${RED}%-10s${NC} %-50s\n" "$tool_name" "Missing" "$link"
             ((count++))
             [ $count -ge 10 ] && [ $count -lt ${#MISSING_TOOLS[@]} ] && {
                 echo -e "  ${DIM}... and $(( ${#MISSING_TOOLS[@]} - count )) more${NC}"
@@ -712,166 +661,40 @@ check_all_tools() {
     clear
     echo -e "${BOLD}${CYAN}🔍 Scanning for security tools...${NC}\n"
     
-    # Network Reconnaissance & Scanning (47 tools)
-    show_category_header "Network Reconnaissance & Scanning" "🔍"
-    local network_tools=("nmap" "amass" "subfinder" "nuclei" "masscan" "rustscan" "naabu" "httpx" "assetfinder" "sublist3r" "knockpy" "gobuster" "ffuf" "dirb" "dirbuster" "wfuzz" "feroxbuster" "dirsearch" "whatweb" "wafw00f" "eyewitness" "aquatone" "gowitness" "httprobe" "waybackurls" "autorecon" "arp-scan" "nbtscan" "rpcclient" "enum4linux" "enum4linux-ng" "smbmap" "netexec" "katana" "hakrawler" "gau" "paramspider" "x8" "jaeles" "dalfox" "testssl" "sslscan" "sslyze" "anew" "qsreplace" "uro" "jwt-tool")
-    for tool in "${network_tools[@]}"; do
-        current=$((current + 1))
-        if check_tool "$tool" "" "Network"; then
-            display_tool_status "$tool" "installed" "Network" "$current" "$TOTAL_COUNT"
-        else
-            display_tool_status "$tool" "missing" "Network" "$current" "$TOTAL_COUNT"
-        fi
-    done
-    
-    # Web Application Security (23 tools)
-    show_category_header "Web Application Security" "🌐"
-    local web_tools=("sqlmap" "wpscan" "zaproxy" "arjun" "nikto" "uniscan" "skipfish" "w3af" "burpsuite" "commix" "xsser" "sqlninja" "jsql-injection" "wapiti" "cadaver" "davtest" "padbuster" "joomscan" "droopescan" "cmsmap" "nosqlmap" "tplmap" "graphql-voyager")
-    for tool in "${web_tools[@]}"; do
-        current=$((current + 1))
-        if check_tool "$tool" "" "Web Security"; then
-            display_tool_status "$tool" "installed" "Web Security" "$current" "$TOTAL_COUNT"
-        else
-            display_tool_status "$tool" "missing" "Web Security" "$current" "$TOTAL_COUNT"
-        fi
-    done
-    
-    # Password & Authentication (18 tools)
-    show_category_header "Password & Authentication" "🔐"
-    local auth_tools=("hydra" "john" "hashcat" "medusa" "patator" "crackmapexec" "ncrack" "crowbar" "brutespray" "thc-hydra" "ophcrack" "rainbowcrack" "hashcat-utils" "pack" "kwprocessor" "hash-identifier" "hashid" "crackstation")
-    for tool in "${auth_tools[@]}"; do
-        current=$((current + 1))
-        if check_tool "$tool" "" "Authentication"; then
-            display_tool_status "$tool" "installed" "Authentication" "$current" "$TOTAL_COUNT"
-        else
-            display_tool_status "$tool" "missing" "Authentication" "$current" "$TOTAL_COUNT"
-        fi
-    done
-    
-    # Binary Analysis & Reverse Engineering (28 tools)
-    show_category_header "Binary Analysis & Reverse Engineering" "🔬"
-    local binary_tools=("gdb" "radare2" "binwalk" "checksec" "strings" "objdump" "xxd" "hexdump" "ghidra" "ida-free" "cutter" "pwntools" "ropper" "one-gadget" "peda" "gef" "pwngdb" "voltron" "gdb-peda" "gdb-gef" "binary-ninja" "ropgadget" "angr" "libc-database" "pwninit" "upx" "readelf" "cyberchef")
-    for tool in "${binary_tools[@]}"; do
-        current=$((current + 1))
-        if check_tool "$tool" "" "Binary Analysis"; then
-            display_tool_status "$tool" "installed" "Binary Analysis" "$current" "$TOTAL_COUNT"
-        else
-            display_tool_status "$tool" "missing" "Binary Analysis" "$current" "$TOTAL_COUNT"
-        fi
-    done
-    
-    # Forensics & Analysis (17 tools)
-    show_category_header "Forensics & Analysis" "🔍"
-    local forensics_tools=("volatility3" "autopsy" "bulk-extractor" "scalpel" "testdisk" "dc3dd" "ddrescue" "foremost" "photorec" "sleuthkit" "afflib-tools" "libewf-tools" "steghide" "stegsolve" "zsteg" "outguess" "exiftool")
-    for tool in "${forensics_tools[@]}"; do
-        current=$((current + 1))
-        if check_tool "$tool" "" "Forensics"; then
-            display_tool_status "$tool" "installed" "Forensics" "$current" "$TOTAL_COUNT"
-        else
-            display_tool_status "$tool" "missing" "Forensics" "$current" "$TOTAL_COUNT"
-        fi
-    done
-    
-    # Wireless & Network Security (15 tools)
-    show_category_header "Wireless & Network Security" "📡"
-    local wireless_tools=("aircrack-ng" "reaver" "wifite" "kismet" "wireshark" "tshark" "tcpdump" "ettercap" "bettercap" "hostapd" "dnsmasq" "macchanger" "mdk3" "mdk4" "pixiewps")
-    for tool in "${wireless_tools[@]}"; do
-        current=$((current + 1))
-        if check_tool "$tool" "" "Wireless Security"; then
-            display_tool_status "$tool" "installed" "Wireless Security" "$current" "$TOTAL_COUNT"
-        else
-            display_tool_status "$tool" "missing" "Wireless Security" "$current" "$TOTAL_COUNT"
-        fi
-    done
-    
-    # Mobile & Hardware Security (13 tools)
-    show_category_header "Mobile & Hardware Security" "📱"
-    local mobile_tools=("aapt" "adb" "fastboot" "usbmuxd" "libimobiledevice-utils" "apktool" "dex2jar" "jd-gui" "jadx" "frida" "objection" "drozer" "evil-winrm")
-    for tool in "${mobile_tools[@]}"; do
-        current=$((current + 1))
-        if check_tool "$tool" "" "Mobile Security"; then
-            display_tool_status "$tool" "installed" "Mobile Security" "$current" "$TOTAL_COUNT"
-        else
-            display_tool_status "$tool" "missing" "Mobile Security" "$current" "$TOTAL_COUNT"
-        fi
-    done
-    
-    # Exploitation Tools (15 tools)
-    show_category_header "Exploitation Tools" "💥"
-    local exploit_tools=("metasploit-framework" "msfvenom" "msfconsole" "searchsploit" "exploit-db" "beef-xss" "armitage" "cobalt-strike" "empire" "powersploit" "mimikatz" "responder" "impacket" "bloodhound" "powerview")
-    for tool in "${exploit_tools[@]}"; do
-        current=$((current + 1))
-        if check_tool "$tool" "" "Exploitation"; then
-            display_tool_status "$tool" "installed" "Exploitation" "$current" "$TOTAL_COUNT"
-        else
-            display_tool_status "$tool" "missing" "Exploitation" "$current" "$TOTAL_COUNT"
-        fi
-    done
-    
-    # Information Gathering (16 tools)
-    show_category_header "Information Gathering (OSINT)" "🕵️"
-    local osint_tools=("theHarvester" "recon-ng" "maltego" "spiderfoot" "shodan" "censys-python" "fierce" "dnsrecon" "dnsenum" "dmitry" "sherlock" "social-analyzer" "pipl" "trufflehog" "have-i-been-pwned" "subjack")
-    for tool in "${osint_tools[@]}"; do
-        current=$((current + 1))
-        if check_tool "$tool" "" "OSINT"; then
-            display_tool_status "$tool" "installed" "OSINT" "$current" "$TOTAL_COUNT"
-        else
-            display_tool_status "$tool" "missing" "OSINT" "$current" "$TOTAL_COUNT"
-        fi
-    done
-    
-    # Post-Exploitation (8 tools)
-    show_category_header "Post-Exploitation" "🎯"
-    local post_exploit_tools=("linpeas" "winpeas" "linenum" "linux-exploit-suggester" "windows-exploit-suggester" "privesc-check" "unix-privesc-check" "gtfoblookup")
-    for tool in "${post_exploit_tools[@]}"; do
-        current=$((current + 1))
-        if check_tool "$tool" "" "Post-Exploitation"; then
-            display_tool_status "$tool" "installed" "Post-Exploitation" "$current" "$TOTAL_COUNT"
-        else
-            display_tool_status "$tool" "missing" "Post-Exploitation" "$current" "$TOTAL_COUNT"
-        fi
-    done
-    
-    # Cloud Security (25 tools)
-    show_category_header "Cloud Security" "☁️"
-    local cloud_tools=("aws-cli" "azure-cli" "gcloud" "kubectl" "docker" "trivy" "cloudsplaining" "pacu" "prowler" "scout-suite" "cloudmapper" "clair" "kube-hunter" "kube-bench" "docker-bench-security" "falco" "checkov" "terrascan" "cloudsploit" "helm" "istio" "opa" "volatility" "msfvenom-cloud" "cloudgoat")
-    for tool in "${cloud_tools[@]}"; do
-        current=$((current + 1))
-        if check_tool "$tool" "" "Cloud Security"; then
-            display_tool_status "$tool" "installed" "Cloud Security" "$current" "$TOTAL_COUNT"
-        else
-            display_tool_status "$tool" "missing" "Cloud Security" "$current" "$TOTAL_COUNT"
-        fi
-    done
-    
-    # System Utilities (12 tools)
-    show_category_header "System Utilities" "🛠️"
-    local system_tools=("curl" "wget" "git" "vim" "nano" "tmux" "htop" "netstat" "ss" "ncat" "socat" "netcat")
-    for tool in "${system_tools[@]}"; do
-        current=$((current + 1))
-        if check_tool "$tool" "" "System"; then
-            display_tool_status "$tool" "installed" "System" "$current" "$TOTAL_COUNT"
-        else
-            display_tool_status "$tool" "missing" "System" "$current" "$TOTAL_COUNT"
-        fi
-    done
-    
-    # Cryptography & Hash Analysis (8 tools)
-    show_category_header "Cryptography & Hash Analysis" "🔐"
-    local crypto_tools=("cipher-identifier" "frequency-analysis" "rsatool" "factordb" "hashcat-legacy" "hash-buster" "findmyhash" "hash-analyzer")
-    for tool in "${crypto_tools[@]}"; do
-        current=$((current + 1))
-        if check_tool "$tool" "" "Cryptography"; then
-            display_tool_status "$tool" "installed" "Cryptography" "$current" "$TOTAL_COUNT"
-        else
-            display_tool_status "$tool" "missing" "Cryptography" "$current" "$TOTAL_COUNT"
-        fi
+    for category in "${!TOOLS[@]}"; do
+        local icon=""
+        case "$category" in
+            "Network Reconnaissance") icon="🔍" ;;
+            "Web Application Security") icon="🌐" ;;
+            "Password & Authentication") icon="🔐" ;;
+            "Binary Analysis & Reverse Engineering") icon="🔬" ;;
+            "Forensics & Analysis") icon="🔍" ;;
+            "Wireless & Network Security") icon="📡" ;;
+            "Mobile & Hardware Security") icon="📱" ;;
+            "Exploitation Tools") icon="💥" ;;
+            "Information Gathering (OSINT)") icon="🕵️" ;;
+            "Post-Exploitation") icon="🎯" ;;
+            "Cloud Security") icon="☁️" ;;
+            "System Utilities") icon="🛠️" ;;
+            "Cryptography & Hash Analysis") icon="🔐" ;;
+        esac
+
+        show_category_header "$category" "$icon"
+
+        for tool in ${TOOLS[$category]}; do
+            current=$((current + 1))
+            if check_tool "$tool" "" "$category"; then
+                display_tool_status "$tool" "installed" "$category" "$current" "$TOTAL_COUNT"
+            else
+                display_tool_status "$tool" "missing" "$category" "$current" "$TOTAL_COUNT"
+            fi
+        done
     done
     
     echo ""  # Clear progress line
 }
 
-# Display installation commands with enhanced formatting and user experience
+# Main function
 show_installation_commands() {
     if [ $MISSING_COUNT -eq 0 ]; then
         return
@@ -1047,7 +870,6 @@ show_installation_commands() {
     echo -e "${GREEN}✅ HexStrike AI setup complete! Run the application with:${NC}"
     echo -e "   ${BOLD}python hexstrike.py${NC}"
 }
-# Main function
 main() {
     detect_distro
     get_package_manager
