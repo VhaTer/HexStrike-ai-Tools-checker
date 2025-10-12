@@ -5,7 +5,7 @@
 # Version 6.2 - UI Refactor
 
 # ╔══════════════════════════════════════════════════════════════════════════════╗
-# ║                    FUTURISTIC COLOR & EFFECTS SYSTEM                        ║
+# ║                    FUTURISTIC COLOR & EFFECTS SYSTEM                         ║
 # ╚══════════════════════════════════════════════════════════════════════════════╝
 
 # Advanced Color Palette - Cyberpunk Theme
