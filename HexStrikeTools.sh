@@ -5,7 +5,7 @@
 # Version 6.2 - UI Refactor
 
 # ╔══════════════════════════════════════════════════════════════════════════════╗
-# ║                    FUTURISTIC COLOR & EFFECTS SYSTEM                         ║
+# ║                    FUTURISTIC COLOR & EFFECTS SYSTEM                        ║
 # ╚══════════════════════════════════════════════════════════════════════════════╝
 
 # Advanced Color Palette - Cyberpunk Theme
@@ -49,8 +49,7 @@ MISSING_COUNT=0
 TOTAL_COUNT=0
 
 # Arrays to store tool information
-MISSING_TOOLS=()
-INSTALLED_TOOLS=()
+ALL_TOOLS_STATUS=()
 
 # Globals for UI Box
 BOX_START_X=0
@@ -100,6 +99,243 @@ TOOL_LINKS=(
     ["uniscan"]="https://github.com/poerschke/Uniscan"
 )
 
+declare -A TOOL_COMMANDS
+TOOL_COMMANDS=(
+    ["nmap"]="sudo apt install nmap"
+    ["masscan"]="sudo apt install masscan"
+    ["amass"]="sudo apt install amass"
+    ["subfinder"]="go install -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest"
+    ["nuclei"]="go install -v github.com/projectdiscovery/nuclei/v2/cmd/nuclei@latest"
+    ["rustscan"]="cargo install rustscan"
+    ["naabu"]="go install -v github.com/projectdiscovery/naabu/v2/cmd/naabu@latest"
+    ["httpx"]="go install -v github.com/projectdiscovery/httpx/cmd/httpx@latest"
+    ["assetfinder"]="go install github.com/tomnomnom/assetfinder@latest"
+    ["sublist3r"]="pip install sublist3r"
+    ["knockpy"]="pip install knockpy"
+    ["gobuster"]="sudo apt install gobuster"
+    ["ffuf"]="go install github.com/ffuf/ffuf@latest"
+    ["dirb"]="sudo apt install dirb"
+    ["dirbuster"]="sudo apt install dirbuster"
+    ["wfuzz"]="pip install wfuzz"
+    ["feroxbuster"]="cargo install feroxbuster"
+    ["dirsearch"]="pip install dirsearch"
+    ["whatweb"]="sudo apt install whatweb"
+    ["wafw00f"]="pip install wafw00f"
+    ["eyewitness"]="sudo apt install eyewitness"
+    ["aquatone"]="go install github.com/michenriksen/aquatone@latest"
+    ["gowitness"]="go install github.com/sensepost/gowitness@latest"
+    ["httprobe"]="go install github.com/tomnomnom/httprobe@latest"
+    ["waybackurls"]="go install github.com/tomnomnom/waybackurls@latest"
+    ["autorecon"]="pip install git+https://github.com/Tib3rius/AutoRecon.git"
+    ["arp-scan"]="sudo apt install arp-scan"
+    ["nbtscan"]="sudo apt install nbtscan"
+    ["rpcclient"]="sudo apt install smbclient"
+    ["enum4linux"]="sudo apt install enum4linux"
+    ["enum4linux-ng"]="pip install enum4linux-ng"
+    ["smbmap"]="pip install smbmap"
+    ["netexec"]="pipx install netexec"
+    ["katana"]="go install github.com/projectdiscovery/katana/cmd/katana@latest"
+    ["hakrawler"]="go install github.com/hakluke/hakrawler@latest"
+    ["gau"]="go install github.com/lc/gau/v2/cmd/gau@latest"
+    ["paramspider"]="pip install paramspider"
+    ["x8"]="N/A"
+    ["jaeles"]="go install github.com/jaeles-project/jaeles@latest"
+    ["dalfox"]="go install github.com/hahwul/dalfox/v2@latest"
+    ["testssl"]="sudo apt install testssl.sh"
+    ["sslscan"]="sudo apt install sslscan"
+    ["sslyze"]="pip install sslyze"
+    ["anew"]="go install github.com/tomnomnom/anew@latest"
+    ["qsreplace"]="go install github.com/tomnomnom/qsreplace@latest"
+    ["uro"]="pip install uro"
+    ["jwt-tool"]="pip install jwt-tool"
+    ["sqlmap"]="sudo apt install sqlmap"
+    ["wpscan"]="gem install wpscan"
+    ["zaproxy"]="sudo apt install zaproxy"
+    ["arjun"]="pip install arjun"
+    ["nikto"]="sudo apt install nikto"
+    ["uniscan"]="sudo apt install uniscan"
+    ["skipfish"]="sudo apt install skipfish"
+    ["w3af"]="pip install w3af"
+    ["burpsuite"]="N/A"
+    ["commix"]="pip install commix"
+    ["xsser"]="sudo apt install xsser"
+    ["sqlninja"]="sudo apt install sqlninja"
+    ["jsql-injection"]="N/A"
+    ["wapiti"]="pip install wapiti-scanner"
+    ["cadaver"]="sudo apt install cadaver"
+    ["davtest"]="sudo apt install davtest"
+    ["padbuster"]="N/A"
+    ["joomscan"]="sudo apt install joomscan"
+    ["droopescan"]="pip install droopescan"
+    ["cmsmap"]="pip install cmsmap"
+    ["nosqlmap"]="pip install nosqlmap"
+    ["tplmap"]="pip install tplmap"
+    ["graphql-voyager"]="N/A"
+    ["hydra"]="sudo apt install hydra"
+    ["john"]="sudo apt install john"
+    ["hashcat"]="sudo apt install hashcat"
+    ["medusa"]="sudo apt install medusa"
+    ["patator"]="pip install patator"
+    ["crackmapexec"]="pipx install crackmapexec"
+    ["ncrack"]="sudo apt install ncrack"
+    ["crowbar"]="pip install crowbar"
+    ["brutespray"]="pip install brutespray"
+    ["thc-hydra"]="sudo apt install hydra-gtk"
+    ["ophcrack"]="sudo apt install ophcrack"
+    ["rainbowcrack"]="sudo apt install rainbowcrack"
+    ["hashcat-utils"]="N/A"
+    ["pack"]="N/A"
+    ["kwprocessor"]="N/A"
+    ["hash-identifier"]="pip install hash-identifier"
+    ["hashid"]="pip install hashid"
+    ["crackstation"]="N/A"
+    ["gdb"]="sudo apt install gdb"
+    ["radare2"]="sudo apt install radare2"
+    ["binwalk"]="sudo apt install binwalk"
+    ["checksec"]="pip install checksec"
+    ["strings"]="sudo apt install binutils"
+    ["objdump"]="sudo apt install binutils"
+    ["xxd"]="sudo apt install vim"
+    ["hexdump"]="sudo apt install bsdmainutils"
+    ["ghidra"]="N/A"
+    ["ida-free"]="N/A"
+    ["cutter"]="N/A"
+    ["pwntools"]="pip install pwntools"
+    ["ropper"]="pip install ropper"
+    ["one-gadget"]="gem install one_gadget"
+    ["peda"]="N/A"
+    ["gef"]="N/A"
+    ["pwngdb"]="N/A"
+    ["voltron"]="pip install voltron"
+    ["gdb-peda"]="N/A"
+    ["gdb-gef"]="N/A"
+    ["binary-ninja"]="N/A"
+    ["ropgadget"]="pip install ropgadget"
+    ["angr"]="pip install angr"
+    ["libc-database"]="N/A"
+    ["pwninit"]="pip install pwninit"
+    ["upx"]="sudo apt install upx-ucl"
+    ["readelf"]="sudo apt install binutils"
+    ["cyberchef"]="N/A"
+    ["volatility3"]="pip install volatility3"
+    ["autopsy"]="sudo apt install autopsy"
+    ["bulk-extractor"]="sudo apt install bulk-extractor"
+    ["scalpel"]="sudo apt install scalpel"
+    ["testdisk"]="sudo apt install testdisk"
+    ["dc3dd"]="sudo apt install dc3dd"
+    ["ddrescue"]="sudo apt install gddrescue"
+    ["foremost"]="sudo apt install foremost"
+    ["photorec"]="sudo apt install testdisk"
+    ["sleuthkit"]="sudo apt install sleuthkit"
+    ["afflib-tools"]="sudo apt install afflib-tools"
+    ["libewf-tools"]="sudo apt install libewf-tools"
+    ["steghide"]="sudo apt install steghide"
+    ["stegsolve"]="N/A"
+    ["zsteg"]="gem install zsteg"
+    ["outguess"]="sudo apt install outguess"
+    ["exiftool"]="sudo apt install libimage-exiftool-perl"
+    ["aircrack-ng"]="sudo apt install aircrack-ng"
+    ["reaver"]="sudo apt install reaver"
+    ["wifite"]="sudo apt install wifite"
+    ["kismet"]="sudo apt install kismet"
+    ["wireshark"]="sudo apt install wireshark"
+    ["tshark"]="sudo apt install tshark"
+    ["tcpdump"]="sudo apt install tcpdump"
+    ["ettercap"]="sudo apt install ettercap-graphical"
+    ["bettercap"]="go install github.com/bettercap/bettercap@latest"
+    ["hostapd"]="sudo apt install hostapd"
+    ["dnsmasq"]="sudo apt install dnsmasq"
+    ["macchanger"]="sudo apt install macchanger"
+    ["mdk3"]="sudo apt install mdk3"
+    ["mdk4"]="N/A"
+    ["pixiewps"]="sudo apt install pixiewps"
+    ["aapt"]="sudo apt install aapt"
+    ["adb"]="sudo apt install adb"
+    ["fastboot"]="sudo apt install fastboot"
+    ["usbmuxd"]="sudo apt install usbmuxd"
+    ["libimobiledevice-utils"]="sudo apt install libimobiledevice-utils"
+    ["apktool"]="sudo apt install apktool"
+    ["dex2jar"]="sudo apt install dex2jar"
+    ["jd-gui"]="N/A"
+    ["jadx"]="sudo apt install jadx"
+    ["frida"]="pip install frida-tools"
+    ["objection"]="pip install objection"
+    ["drozer"]="pip install drozer"
+    ["evil-winrm"]="gem install evil-winrm"
+    ["metasploit-framework"]="N/A"
+    ["msfvenom"]="N/A"
+    ["msfconsole"]="N/A"
+    ["searchsploit"]="sudo apt install exploitdb"
+    ["exploit-db"]="sudo apt install exploitdb"
+    ["beef-xss"]="sudo apt install beef-xss"
+    ["armitage"]="sudo apt install armitage"
+    ["cobalt-strike"]="N/A"
+    ["empire"]="pip install empire"
+    ["powersploit"]="N/A"
+    ["mimikatz"]="N/A"
+    ["responder"]="sudo apt install responder"
+    ["impacket"]="pip install impacket"
+    ["bloodhound"]="pip install bloodhound"
+    ["powerview"]="N/A"
+    ["theharvester"]="pip install theharvester"
+    ["recon-ng"]="pip install recon-ng"
+    ["maltego"]="N/A"
+    ["spiderfoot"]="pip install spiderfoot"
+    ["shodan"]="pip install shodan"
+    ["censys-python"]="pip install censys"
+    ["fierce"]="pip install fierce"
+    ["dnsrecon"]="pip install dnsrecon"
+    ["dnsenum"]="sudo apt install dnsenum"
+    ["dmitry"]="sudo apt install dmitry"
+    ["sherlock"]="pip install sherlock"
+    ["social-analyzer"]="pip install social-analyzer"
+    ["pipl"]="N/A"
+    ["trufflehog"]="pip install trufflehog"
+    ["have-i-been-pwned"]="pip install haveibeenpwned"
+    ["subjack"]="go install github.com/haccer/subjack@latest"
+    ["linpeas"]="N/A"
+    ["winpeas"]="N/A"
+    ["linenum"]="N/A"
+    ["linux-exploit-suggester"]="N/A"
+    ["windows-exploit-suggester"]="N/A"
+    ["privesc-check"]="N/A"
+    ["unix-privesc-check"]="N/A"
+    ["gtfoblookup"]="pip install gtfoblookup"
+    ["aws-cli"]="pip install awscli"
+    ["azure-cli"]="pip install azure-cli"
+    ["gcloud"]="N/A"
+    ["kubectl"]="N/A"
+    ["docker"]="sudo apt install docker.io"
+    ["trivy"]="N/A"
+    ["cloudsplaining"]="pip install cloudsplaining"
+    ["pacu"]="pip install pacu"
+    ["prowler"]="pip install prowler"
+    ["scout-suite"]="pip install scout-suite"
+    ["cloudmapper"]="pip install cloudmapper"
+    ["clair"]="N/A"
+    ["kube-hunter"]="pip install kube-hunter"
+    ["kube-bench"]="N/A"
+    ["docker-bench-security"]="N/A"
+    ["falco"]="N/A"
+    ["checkov"]="pip install checkov"
+    ["terrascan"]="N/A"
+    ["cloudsploit"]="N/A"
+    ["helm"]="N/A"
+    ["istio"]="N/A"
+    ["opa"]="N/A"
+    ["volatility"]="pip install volatility"
+    ["msfvenom-cloud"]="N/A"
+    ["cloudgoat"]="N/A"
+    ["cipher-identifier"]="N/A"
+    ["frequency-analysis"]="N/A"
+    ["rsatool"]="pip install rsatool"
+    ["factordb"]="pip install factordb"
+    ["hashcat-legacy"]="N/A"
+    ["hash-buster"]="N/A"
+    ["findmyhash"]="sudo apt install findmyhash"
+    ["hash-analyzer"]="pip install hash-analyzer"
+)
+
 # Helper to move cursor to a given location inside the box
 cur_mov() {
     printf "\033[$((${BOX_START_Y} + $1));$((${BOX_START_X} + $2))H"
@@ -137,42 +373,37 @@ draw_box() {
 check_tool() {
     local tool=$1
     local category=${2:-"General"}
+    local status="MISSING"
 
     if command -v "$tool" &> /dev/null; then
-        INSTALLED_TOOLS+=("$tool")
+        status="INSTALLED"
         INSTALLED_COUNT=$((INSTALLED_COUNT + 1))
-        return 0
+    elif python3 -c "import ${tool//-/_}" &> /dev/null; then
+        status="INSTALLED"
+        INSTALLED_COUNT=$((INSTALLED_COUNT + 1))
+    elif gem list -i "$tool" &> /dev/null; then
+        status="INSTALLED"
+        INSTALLED_COUNT=$((INSTALLED_COUNT + 1))
+    else
+        local locations=(
+            "/usr/bin/$tool" "/usr/local/bin/$tool" "/opt/$tool/bin/$tool" "/opt/$tool"
+            "/snap/bin/$tool" "$HOME/go/bin/$tool" "$HOME/.cargo/bin/$tool"
+            "$HOME/.local/bin/$tool" "/usr/sbin/$tool" "/sbin/$tool"
+        )
+        for location in "${locations[@]}"; do
+            if [ -x "$location" ]; then
+                status="INSTALLED"
+                INSTALLED_COUNT=$((INSTALLED_COUNT + 1))
+                break
+            fi
+        done
     fi
 
-    local python_tool_name=${tool//-/_}
-    if python3 -c "import $python_tool_name" &> /dev/null; then
-        INSTALLED_TOOLS+=("$tool")
-        INSTALLED_COUNT=$((INSTALLED_COUNT + 1))
-        return 0
+    if [ "$status" == "MISSING" ]; then
+        MISSING_COUNT=$((MISSING_COUNT + 1))
     fi
 
-    if gem list -i "$tool" &> /dev/null; then
-        INSTALLED_TOOLS+=("$tool")
-        INSTALLED_COUNT=$((INSTALLED_COUNT + 1))
-        return 0
-    fi
-
-    local locations=(
-        "/usr/bin/$tool" "/usr/local/bin/$tool" "/opt/$tool/bin/$tool" "/opt/$tool"
-        "/snap/bin/$tool" "$HOME/go/bin/$tool" "$HOME/.cargo/bin/$tool"
-        "$HOME/.local/bin/$tool" "/usr/sbin/$tool" "/sbin/$tool"
-    )
-    for location in "${locations[@]}"; do
-        if [ -x "$location" ]; then
-            INSTALLED_TOOLS+=("$tool")
-            INSTALLED_COUNT=$((INSTALLED_COUNT + 1))
-            return 0
-        fi
-    done
-
-    MISSING_TOOLS+=("$tool:$category")
-    MISSING_COUNT=$((MISSING_COUNT + 1))
-    return 1
+    ALL_TOOLS_STATUS+=("$category,$tool,$status")
 }
 
 calculate_total_tools() {
@@ -247,51 +478,13 @@ main() {
     cur_mov $content_y 3; printf "%*s" $CONTENT_WIDTH ""
     cur_mov $((content_y + 1)) 3; printf "%*s" $CONTENT_WIDTH ""
 
-    # Draw separator
-    cur_mov $content_y 2
-    printf "${NEON_BLUE}"
-    for ((i=0; i<CONTENT_WIDTH; i++)); do printf "─"; done
-    printf "${NC}"
-
-    content_y=$((content_y + 2))
-    cur_mov $content_y 3
-    printf "${BOLD}${GREEN}✅ Scan Complete!${NC}"
-    
-    content_y=$((content_y + 1))
-    cur_mov $content_y 3
-    printf "${BOLD}${CYAN}📊 Tool Status Summary:${NC}"
-    
-    cur_mov $((content_y + 1)) 3
-    printf "Total Tools: ${TOTAL_COUNT} | Installed: ${GREEN}${INSTALLED_COUNT}${NC} | Missing: ${RED}${MISSING_COUNT}${NC}"
-
-    content_y=$((content_y + 3))
-    cur_mov $content_y 3
-    printf "${BOLD}🔍 Missing Tools & Install Links:${NC}"
-    
-    local list_y=$((content_y + 1))
-    local max_missing_tools=$((BOX_HEIGHT - list_y - 3))
-    local count=0
-
-    for tool_info in "${MISSING_TOOLS[@]}"; do
-        if (( count >= max_missing_tools )); then
-            cur_mov $((list_y + count)) 3
-            printf "%*s\r" $CONTENT_WIDTH ""
-            printf "${DIM}... and $(( ${#MISSING_TOOLS[@]} - count )) more${NC}"
-            break
-        fi
-        
-        cur_mov $((list_y + count)) 3
-        printf "%*s\r" $CONTENT_WIDTH ""
-        
-        local tool_name="${tool_info%%:*}"
-        local link=${TOOL_LINKS[$tool_name]}
-        if [ -z "$link" ]; then
-            link="N/A"
-        fi
-        
-        printf "${CROSS_MARK} %-30s ${NEON_PURPLE}${link}${NC}" "$tool_name"
-        ((count++))
+    # Clear the screen for the report
+    for ((i=content_y; i<BOX_HEIGHT-1; i++)); do
+        cur_mov $i 3
+        printf "%*s" $CONTENT_WIDTH ""
     done
+
+    show_report "$content_y"
 
     local footer_y=$((BOX_HEIGHT - 2))
     cur_mov $footer_y 2
@@ -299,10 +492,46 @@ main() {
     for ((i=0; i<CONTENT_WIDTH; i++)); do printf "─"; done
     printf "${NC}"
     
-    cur_mov $((footer_y + 1)) 3
-    printf "A tool to verify your pentesting toolkit. For more info, visit: ${UNDERLINE}https://github.com/HexStrike-AI/HexStrike${NC}"
+    local footer_text_y=$((BOX_HEIGHT - 2))
+    cur_mov $footer_text_y 3
+    printf "${CYAN}Ethical Warning: Use these tools responsibly and only on systems you are authorized to test.${NC}\n"
+    
+    cur_mov $((footer_text_y + 1)) 3
+    printf "${DIM}Disclaimer: Tool status may not be 100%% accurate. Please verify manually. Created By 'PureHate'${NC}"
 
     printf "\033[$(tput lines);1H"
+}
+
+# Function to display the results in a columnar format
+show_report() {
+    local content_y=$1
+    
+    # Header
+    cur_mov $content_y 3
+    printf "${BOLD}${YELLOW}%-25s %-20s %-10s %-30s %-30s${NC}\n" "Category" "Tool" "Status" "Install Command" "Link"
+    content_y=$((content_y + 1))
+
+    for tool_info in "${ALL_TOOLS_STATUS[@]}"; do
+        IFS=',' read -r category tool_name status <<< "$tool_info"
+        
+        local install_cmd=${TOOL_COMMANDS[$tool_name]:-"N/A"}
+        local link=${TOOL_LINKS[$tool_name]:-"N/A"}
+
+        local status_color="${RED}"
+        if [ "$status" == "INSTALLED" ]; then
+            status_color="${GREEN}"
+        fi
+
+        cur_mov $content_y 3
+        printf "%-25s %-20s ${status_color}%-10s${NC} %-30s %-30s\n" "$category" "$tool_name" "$status" "$install_cmd" "$link"
+        content_y=$((content_y + 1))
+        
+        if (( content_y >= BOX_HEIGHT - 2 )); then
+            cur_mov $content_y 3
+            printf "${DIM}... and many more. Please expand your terminal for a full list.${NC}"
+            break
+        fi
+    done
 }
 
 main
