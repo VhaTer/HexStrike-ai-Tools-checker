@@ -21,6 +21,15 @@ ORANGE='\033[0;33m'
 PURPLE='\033[0;35m'
 NC='\033[0m'
 
+# Additional Stylish Colors
+LIGHT_RED='\033[1;31m'
+LIGHT_GREEN='\033[1;32m'
+LIGHT_YELLOW='\033[1;33m'
+LIGHT_BLUE='\033[1;34m'
+LIGHT_MAGENTA='\033[1;35m'
+LIGHT_CYAN='\033[1;36m'
+DARK_GRAY='\033[1;30m'
+
 # Neon Colors - Futuristic Glow Effect
 NEON_GREEN='\033[38;5;46m'
 NEON_BLUE='\033[38;5;51m'
@@ -59,281 +68,301 @@ BOX_HEIGHT=0
 CONTENT_WIDTH=0
 CONTENT_HEIGHT=0
 
+# Function to fetch and parse the tool list from the README
+fetch_and_parse_tools() {
+    local url="https://raw.githubusercontent.com/0x4m4/hexstrike-ai/refs/heads/master/README.md"
+    local readme_content=$(curl -s "$url")
+
+    # Use awk to parse the content and populate the TOOLS array
+    while IFS= read -r line; do
+        if [[ "$line" =~ ^"###" ]]; then
+            current_category=$(echo "$line" | sed -e 's/^### //' -e 's/ (.*//')
+        elif [[ "$line" =~ ^"-" ]]; then
+            tool_name=$(echo "$line" | awk -F'**' '{print $2}')
+            if [ -n "$tool_name" ]; then
+                TOOLS[$current_category]+="$tool_name "
+            fi
+        fi
+    done <<< "$(echo "$readme_content" | awk '/## Security Tools Arsenal/,/---/')"
+}
+
 # Centralized Tool Definitions
 declare -A TOOLS
-TOOLS=(
-    ["Network Reconnaissance"]="nmap masscan amass subfinder nuclei rustscan naabu httpx assetfinder sublist3r knockpy gobuster ffuf dirb dirbuster wfuzz feroxbuster dirsearch whatweb wafw00f eyewitness aquatone gowitness httprobe waybackurls autorecon arp-scan nbtscan rpcclient enum4linux enum4linux-ng smbmap netexec katana hakrawler gau paramspider x8 jaeles dalfox testssl sslscan sslyze anew qsreplace uro jwt-tool"
-    ["Web Application Security"]="sqlmap wpscan zaproxy arjun nikto uniscan skipfish w3af burpsuite commix xsser sqlninja jsql-injection wapiti cadaver davtest padbuster joomscan droopescan cmsmap nosqlmap tplmap graphql-voyager"
-    ["Password & Authentication"]="hydra john hashcat medusa patator crackmapexec ncrack crowbar brutespray thc-hydra ophcrack rainbowcrack hashcat-utils pack kwprocessor hash-identifier hashid crackstation"
-    ["Binary Analysis & Reverse Engineering"]="gdb radare2 binwalk checksec strings objdump xxd hexdump ghidra ida-free cutter pwntools ropper one-gadget peda gef pwngdb voltron gdb-peda gdb-gef binary-ninja ropgadget angr libc-database pwninit upx readelf cyberchef"
-    ["Forensics & Analysis"]="volatility3 autopsy bulk-extractor scalpel testdisk dc3dd ddrescue foremost photorec sleuthkit afflib-tools libewf-tools steghide stegsolve zsteg outguess exiftool"
-    ["Wireless & Network Security"]="aircrack-ng reaver wifite kismet wireshark tshark tcpdump ettercap bettercap hostapd dnsmasq macchanger mdk3 mdk4 pixiewps"
-    ["Mobile & Hardware Security"]="aapt adb fastboot usbmuxd libimobiledevice-utils apktool dex2jar jd-gui jadx frida objection drozer evil-winrm"
-    ["Exploitation Tools"]="metasploit-framework msfvenom msfconsole searchsploit exploit-db beef-xss armitage cobalt-strike empire powersploit mimikatz responder impacket bloodhound powerview"
-    ["Information Gathering (OSINT)"]="theharvester recon-ng maltego spiderfoot shodan censys-python fierce dnsrecon dnsenum dmitry sherlock social-analyzer pipl trufflehog have-i-been-pwned subjack"
-    ["Post-Exploitation"]="linpeas winpeas linenum linux-exploit-suggester windows-exploit-suggester privesc-check unix-privesc-check gtfoblookup"
-    ["Cloud Security"]="aws-cli azure-cli gcloud kubectl docker trivy cloudsplaining pacu prowler scout-suite cloudmapper clair kube-hunter kube-bench docker-bench-security falco checkov terrascan cloudsploit helm istio opa volatility msfvenom-cloud cloudgoat"
-    ["System Utilities"]="curl wget git vim nano tmux screen htop iotop netstat ss lsof strace ltrace ncat socat"
-    ["Cryptography & Hash Analysis"]="cipher-identifier frequency-analysis rsatool factordb hashcat-legacy hash-buster findmyhash hash-analyzer"
-)
 
 declare -A TOOL_LINKS
 TOOL_LINKS=(
-    ["nmap"]="https://nmap.org/download.html"
-    ["masscan"]="https://github.com/robertdavidgraham/masscan"
-    ["amass"]="https://github.com/OWASP/Amass/wiki/Installation-Guide"
-    ["sqlmap"]="https://github.com/sqlmapproject/sqlmap"
-    ["wpscan"]="https://wpscan.com/how-to-install-wpscan/"
-    ["zaproxy"]="https://www.zaproxy.org/download/"
-    ["hydra"]="https://github.com/vanhauser-thc/thc-hydra"
-    ["john"]="https://www.openwall.com/john/"
-    ["hashcat"]="https://hashcat.net/hashcat/"
-    ["radare2"]="https://rada.re/n/radare2.html"
-    ["binwalk"]="https://github.com/ReFirmLabs/binwalk"
-    ["ghidra"]="https://ghidra-sre.org/"
-    ["theharvester"]="https://github.com/laramies/theHarvester"
-    ["recon-ng"]="https://github.com/lanmaster53/recon-ng"
-    ["maltego"]="https://www.maltego.com/downloads/"
-    ["arjun"]="https://github.com/s0md3v/Arjun"
-    ["nikto"]="https://github.com/sullo/nikto"
-    ["uniscan"]="https://github.com/poerschke/Uniscan"
+    ["Nmap"]="https://nmap.org/"
+    ["Rustscan"]="https://github.com/RustScan/RustScan"
+    ["Masscan"]="https://github.com/robertdavidgraham/masscan"
+    ["AutoRecon"]="https://github.com/Tib3rius/AutoRecon"
+    ["Amass"]="https://github.com/OWASP/Amass"
+    ["Subfinder"]="https://github.com/projectdiscovery/subfinder"
+    ["Fierce"]="https://github.com/mschwager/fierce"
+    ["DNSEnum"]="https://github.com/fwaeytens/dnsenum"
+    ["TheHarvester"]="https://github.com/laramies/theHarvester"
+    ["ARP-Scan"]="https://github.com/royhills/arp-scan"
+    ["NBTScan"]="https://github.com/resurrecting-open-source-projects/nbtscan"
+    ["RPCClient"]="https://www.samba.org/samba/docs/current/man-html/rpcclient.1.html"
+    ["Enum4linux"]="https://github.com/CiscoCXSecurity/enum4linux"
+    ["Enum4linux-ng"]="https://github.com/cddmp/enum4linux-ng"
+    ["SMBMap"]="https://github.com/ShawnDEvans/smbmap"
+    ["Responder"]="https://github.com/lgandx/Responder"
+    ["NetExec"]="https://github.com/Pennyw0rth/NetExec"
+    ["Gobuster"]="https://github.com/OJ/gobuster"
+    ["Dirsearch"]="https://github.com/maurosoria/dirsearch"
+    ["Feroxbuster"]="https://github.com/epi052/feroxbuster"
+    ["FFuf"]="https://github.com/ffuf/ffuf"
+    ["Dirb"]="https://www.kali.org/tools/dirb/"
+    ["HTTPx"]="https://github.com/projectdiscovery/httpx"
+    ["Katana"]="https://github.com/projectdiscovery/katana"
+    ["Hakrawler"]="https://github.com/hakluke/hakrawler"
+    ["Gau"]="https://github.com/lc/gau"
+    ["Waybackurls"]="https://github.com/tomnomnom/waybackurls"
+    ["Nuclei"]="https://github.com/projectdiscovery/nuclei"
+    ["Nikto"]="https://github.com/sullo/nikto"
+    ["SQLMap"]="https://sqlmap.org/"
+    ["WPScan"]="https://wpscan.com/"
+    ["Arjun"]="https://github.com/s0md3v/Arjun"
+    ["ParamSpider"]="https://github.com/devanshbatham/ParamSpider"
+    ["X8"]="https://github.com/Sh1Yo/x8"
+    ["Jaeles"]="https://github.com/jaeles-project/jaeles"
+    ["Dalfox"]="https://github.com/hahwul/dalfox"
+    ["Wafw00f"]="https://github.com/EnableSecurity/wafw00f"
+    ["TestSSL"]="https://github.com/drwetter/testssl.sh"
+    ["SSLScan"]="https://github.com/rbsec/sslscan"
+    ["SSLyze"]="https://github.com/nabla-c0d3/sslyze"
+    ["Anew"]="https://github.com/tomnomnom/anew"
+    ["QSReplace"]="https://github.com/tomnomnom/qsreplace"
+    ["Uro"]="https://github.com/s0md3v/uro"
+    ["Whatweb"]="https://github.com/urbanadventurer/WhatWeb"
+    ["JWT-Tool"]="https://github.com/ticarpi/jwt_tool"
+    ["GraphQL-Voyager"]="https://github.com/APIs-guru/graphql-voyager"
+    ["Burp Suite Extensions"]="https://portswigger.net/burp/extender"
+    ["ZAP Proxy"]="https://www.zaproxy.org/"
+    ["Wfuzz"]="https://github.com/xmendez/wfuzz"
+    ["Commix"]="https://github.com/commixproject/commix"
+    ["NoSQLMap"]="https://github.com/codingo/NoSQLMap"
+    ["Tplmap"]="https://github.com/epinna/tplmap"
+    ["Hydra"]="https://github.com/vanhauser-thc/thc-hydra"
+    ["John the Ripper"]="https://www.openwall.com/john/"
+    ["Hashcat"]="https://hashcat.net/hashcat/"
+    ["Medusa"]="https://github.com/jmk-foofus/medusa"
+    ["Patator"]="https://github.com/lanjelot/patator"
+    ["Evil-WinRM"]="https://github.com/Hackplayers/evil-winrm"
+    ["Hash-Identifier"]="https://github.com/blackploit/hash-identifier"
+    ["HashID"]="https://github.com/psypanda/hashID"
+    ["CrackStation"]="https://crackstation.net/"
+    ["Ophcrack"]="http://ophcrack.sourceforge.net/"
+    ["GDB"]="https://www.gnu.org/software/gdb/"
+    ["GDB-PEDA"]="https://github.com/longld/peda"
+    ["GDB-GEF"]="https://github.com/hugsy/gef"
+    ["Radare2"]="https://www.radare.org/n/radare2.html"
+    ["Ghidra"]="https://ghidra-sre.org/"
+    ["IDA Free"]="https://hex-rays.com/ida-free/"
+    ["Binary Ninja"]="https://binary.ninja/"
+    ["Binwalk"]="https://github.com/ReFirmLabs/binwalk"
+    ["ROPgadget"]="https://github.com/JonathanSalwan/ROPgadget"
+    ["Ropper"]="https://github.com/sashs/ropper"
+    ["One-Gadget"]="https://github.com/david942j/one_gadget"
+    ["Checksec"]="https://github.com/slimm609/checksec.sh"
+    ["Strings"]="https://www.gnu.org/software/binutils/"
+    ["Objdump"]="https://www.gnu.org/software/binutils/"
+    ["Readelf"]="https://www.gnu.org/software/binutils/"
+    ["XXD"]="https://www.vim.org/"
+    ["Hexdump"]="https://github.com/util-linux/util-linux"
+    ["Pwntools"]="https://github.com/Gallopsled/pwntools"
+    ["Angr"]="https://angr.io/"
+    ["Libc-Database"]="https://github.com/niklasb/libc-database"
+    ["Pwninit"]="https://github.com/io12/pwninit"
+    ["Volatility"]="https://www.volatilityfoundation.org/"
+    ["MSFVenom"]="https://www.metasploit.com/"
+    ["UPX"]="https://upx.github.io/"
+    ["Prowler"]="https://github.com/prowler-cloud/prowler"
+    ["Scout Suite"]="https://github.com/nccgroup/ScoutSuite"
+    ["CloudMapper"]="https://github.com/duo-labs/cloudmapper"
+    ["Pacu"]="https://github.com/RhinoSecurityLabs/pacu"
+    ["Trivy"]="https://github.com/aquasecurity/trivy"
+    ["Clair"]="https://github.com/quay/clair"
+    ["Kube-Hunter"]="https://github.com/aquasecurity/kube-hunter"
+    ["Kube-Bench"]="https://github.com/aquasecurity/kube-bench"
+    ["Docker Bench Security"]="https://github.com/docker/docker-bench-security"
+    ["Falco"]="https://falco.org/"
+    ["Checkov"]="https://www.checkov.io/"
+    ["Terrascan"]="https://github.com/tenable/terrascan"
+    ["CloudSploit"]="https://github.com/aquasecurity/cloudsploit"
+    ["AWS CLI"]="https://aws.amazon.com/cli/"
+    ["Azure CLI"]="https://docs.microsoft.com/en-us/cli/azure/"
+    ["GCloud"]="https://cloud.google.com/sdk/gcloud"
+    ["Kubectl"]="https://kubernetes.io/docs/reference/kubectl/overview/"
+    ["Helm"]="https://helm.sh/"
+    ["Istio"]="https://istio.io/"
+    ["OPA"]="https://www.openpolicyagent.org/"
+    ["Volatility3"]="https://github.com/volatilityfoundation/volatility3"
+    ["Foremost"]="http://foremost.sourceforge.net/"
+    ["PhotoRec"]="https://www.cgsecurity.org/wiki/PhotoRec"
+    ["TestDisk"]="https://www.cgsecurity.org/wiki/TestDisk"
+    ["Steghide"]="http://steghide.sourceforge.net/"
+    ["Stegsolve"]="https://github.com/zardus/stegsolve"
+    ["Zsteg"]="https://github.com/zed-0xff/zsteg"
+    ["Outguess"]="https://github.com/resurrecting-open-source-projects/outguess"
+    ["ExifTool"]="https://exiftool.org/"
+    ["Scalpel"]="https://github.com/sleuthkit/scalpel"
+    ["Bulk Extractor"]="https://github.com/simsong/bulk_extractor"
+    ["Autopsy"]="https://www.sleuthkit.org/autopsy/"
+    ["Sleuth Kit"]="https://www.sleuthkit.org/"
+    ["CyberChef"]="https://gchq.github.io/CyberChef/"
+    ["Cipher-Identifier"]="https://github.com/blackploit/cipher-identifier"
+    ["Frequency-Analysis"]="https://www.dcode.fr/frequency-analysis"
+    ["RSATool"]="https://github.com/R-s-s/RSATool"
+    ["FactorDB"]="http://factordb.com/"
+    ["Sherlock"]="https://github.com/sherlock-project/sherlock"
+    ["Social-Analyzer"]="https://github.com/qeeqbox/social-analyzer"
+    ["Recon-ng"]="https://github.com/lanmaster53/recon-ng"
+    ["Maltego"]="https://www.maltego.com/"
+    ["SpiderFoot"]="https://www.spiderfoot.net/"
+    ["Shodan"]="https://www.shodan.io/"
+    ["Censys"]="https://censys.io/"
+    ["Have I Been Pwned"]="https://haveibeenpwned.com/"
+    ["Pipl"]="https://pipl.com/"
+    ["TruffleHog"]="https://github.com/trufflesecurity/truffleHog"
 )
 
 declare -A TOOL_COMMANDS
 TOOL_COMMANDS=(
-    ["nmap"]="sudo apt install nmap"
-    ["masscan"]="sudo apt install masscan"
-    ["amass"]="sudo apt install amass"
-    ["subfinder"]="go install -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest"
-    ["nuclei"]="go install -v github.com/projectdiscovery/nuclei/v2/cmd/nuclei@latest"
-    ["rustscan"]="cargo install rustscan"
-    ["naabu"]="go install -v github.com/projectdiscovery/naabu/v2/cmd/naabu@latest"
-    ["httpx"]="go install -v github.com/projectdiscovery/httpx/cmd/httpx@latest"
-    ["assetfinder"]="go install github.com/tomnomnom/assetfinder@latest"
-    ["sublist3r"]="pip install sublist3r"
-    ["knockpy"]="pip install knockpy"
-    ["gobuster"]="sudo apt install gobuster"
-    ["ffuf"]="go install github.com/ffuf/ffuf@latest"
-    ["dirb"]="sudo apt install dirb"
-    ["dirbuster"]="sudo apt install dirbuster"
-    ["wfuzz"]="pip install wfuzz"
-    ["feroxbuster"]="cargo install feroxbuster"
-    ["dirsearch"]="pip install dirsearch"
-    ["whatweb"]="sudo apt install whatweb"
-    ["wafw00f"]="pip install wafw00f"
-    ["eyewitness"]="sudo apt install eyewitness"
-    ["aquatone"]="go install github.com/michenriksen/aquatone@latest"
-    ["gowitness"]="go install github.com/sensepost/gowitness@latest"
-    ["httprobe"]="go install github.com/tomnomnom/httprobe@latest"
-    ["waybackurls"]="go install github.com/tomnomnom/waybackurls@latest"
-    ["autorecon"]="pip install git+https://github.com/Tib3rius/AutoRecon.git"
-    ["arp-scan"]="sudo apt install arp-scan"
-    ["nbtscan"]="sudo apt install nbtscan"
-    ["rpcclient"]="sudo apt install smbclient"
-    ["enum4linux"]="sudo apt install enum4linux"
-    ["enum4linux-ng"]="pip install enum4linux-ng"
-    ["smbmap"]="pip install smbmap"
-    ["netexec"]="pipx install netexec"
-    ["katana"]="go install github.com/projectdiscovery/katana/cmd/katana@latest"
-    ["hakrawler"]="go install github.com/hakluke/hakrawler@latest"
-    ["gau"]="go install github.com/lc/gau/v2/cmd/gau@latest"
-    ["paramspider"]="pip install paramspider"
-    ["x8"]="N/A"
-    ["jaeles"]="go install github.com/jaeles-project/jaeles@latest"
-    ["dalfox"]="go install github.com/hahwul/dalfox/v2@latest"
-    ["testssl"]="sudo apt install testssl.sh"
-    ["sslscan"]="sudo apt install sslscan"
-    ["sslyze"]="pip install sslyze"
-    ["anew"]="go install github.com/tomnomnom/anew@latest"
-    ["qsreplace"]="go install github.com/tomnomnom/qsreplace@latest"
-    ["uro"]="pip install uro"
-    ["jwt-tool"]="pip install jwt-tool"
-    ["sqlmap"]="sudo apt install sqlmap"
-    ["wpscan"]="gem install wpscan"
-    ["zaproxy"]="sudo apt install zaproxy"
-    ["arjun"]="pip install arjun"
-    ["nikto"]="sudo apt install nikto"
-    ["uniscan"]="sudo apt install uniscan"
-    ["skipfish"]="sudo apt install skipfish"
-    ["w3af"]="pip install w3af"
-    ["burpsuite"]="N/A"
-    ["commix"]="pip install commix"
-    ["xsser"]="sudo apt install xsser"
-    ["sqlninja"]="sudo apt install sqlninja"
-    ["jsql-injection"]="N/A"
-    ["wapiti"]="pip install wapiti-scanner"
-    ["cadaver"]="sudo apt install cadaver"
-    ["davtest"]="sudo apt install davtest"
-    ["padbuster"]="N/A"
-    ["joomscan"]="sudo apt install joomscan"
-    ["droopescan"]="pip install droopescan"
-    ["cmsmap"]="pip install cmsmap"
-    ["nosqlmap"]="pip install nosqlmap"
-    ["tplmap"]="pip install tplmap"
-    ["graphql-voyager"]="N/A"
-    ["hydra"]="sudo apt install hydra"
-    ["john"]="sudo apt install john"
-    ["hashcat"]="sudo apt install hashcat"
-    ["medusa"]="sudo apt install medusa"
-    ["patator"]="pip install patator"
-    ["crackmapexec"]="pipx install crackmapexec"
-    ["ncrack"]="sudo apt install ncrack"
-    ["crowbar"]="pip install crowbar"
-    ["brutespray"]="pip install brutespray"
-    ["thc-hydra"]="sudo apt install hydra-gtk"
-    ["ophcrack"]="sudo apt install ophcrack"
-    ["rainbowcrack"]="sudo apt install rainbowcrack"
-    ["hashcat-utils"]="N/A"
-    ["pack"]="N/A"
-    ["kwprocessor"]="N/A"
-    ["hash-identifier"]="pip install hash-identifier"
-    ["hashid"]="pip install hashid"
-    ["crackstation"]="N/A"
-    ["gdb"]="sudo apt install gdb"
-    ["radare2"]="sudo apt install radare2"
-    ["binwalk"]="sudo apt install binwalk"
-    ["checksec"]="pip install checksec"
-    ["strings"]="sudo apt install binutils"
-    ["objdump"]="sudo apt install binutils"
-    ["xxd"]="sudo apt install vim"
-    ["hexdump"]="sudo apt install bsdmainutils"
-    ["ghidra"]="N/A"
-    ["ida-free"]="N/A"
-    ["cutter"]="N/A"
-    ["pwntools"]="pip install pwntools"
-    ["ropper"]="pip install ropper"
-    ["one-gadget"]="gem install one_gadget"
-    ["peda"]="N/A"
-    ["gef"]="N/A"
-    ["pwngdb"]="N/A"
-    ["voltron"]="pip install voltron"
-    ["gdb-peda"]="N/A"
-    ["gdb-gef"]="N/A"
-    ["binary-ninja"]="N/A"
-    ["ropgadget"]="pip install ropgadget"
-    ["angr"]="pip install angr"
-    ["libc-database"]="N/A"
-    ["pwninit"]="pip install pwninit"
-    ["upx"]="sudo apt install upx-ucl"
-    ["readelf"]="sudo apt install binutils"
-    ["cyberchef"]="N/A"
-    ["volatility3"]="pip install volatility3"
-    ["autopsy"]="sudo apt install autopsy"
-    ["bulk-extractor"]="sudo apt install bulk-extractor"
-    ["scalpel"]="sudo apt install scalpel"
-    ["testdisk"]="sudo apt install testdisk"
-    ["dc3dd"]="sudo apt install dc3dd"
-    ["ddrescue"]="sudo apt install gddrescue"
-    ["foremost"]="sudo apt install foremost"
-    ["photorec"]="sudo apt install testdisk"
-    ["sleuthkit"]="sudo apt install sleuthkit"
-    ["afflib-tools"]="sudo apt install afflib-tools"
-    ["libewf-tools"]="sudo apt install libewf-tools"
-    ["steghide"]="sudo apt install steghide"
-    ["stegsolve"]="N/A"
-    ["zsteg"]="gem install zsteg"
-    ["outguess"]="sudo apt install outguess"
-    ["exiftool"]="sudo apt install libimage-exiftool-perl"
-    ["aircrack-ng"]="sudo apt install aircrack-ng"
-    ["reaver"]="sudo apt install reaver"
-    ["wifite"]="sudo apt install wifite"
-    ["kismet"]="sudo apt install kismet"
-    ["wireshark"]="sudo apt install wireshark"
-    ["tshark"]="sudo apt install tshark"
-    ["tcpdump"]="sudo apt install tcpdump"
-    ["ettercap"]="sudo apt install ettercap-graphical"
-    ["bettercap"]="go install github.com/bettercap/bettercap@latest"
-    ["hostapd"]="sudo apt install hostapd"
-    ["dnsmasq"]="sudo apt install dnsmasq"
-    ["macchanger"]="sudo apt install macchanger"
-    ["mdk3"]="sudo apt install mdk3"
-    ["mdk4"]="N/A"
-    ["pixiewps"]="sudo apt install pixiewps"
-    ["aapt"]="sudo apt install aapt"
-    ["adb"]="sudo apt install adb"
-    ["fastboot"]="sudo apt install fastboot"
-    ["usbmuxd"]="sudo apt install usbmuxd"
-    ["libimobiledevice-utils"]="sudo apt install libimobiledevice-utils"
-    ["apktool"]="sudo apt install apktool"
-    ["dex2jar"]="sudo apt install dex2jar"
-    ["jd-gui"]="N/A"
-    ["jadx"]="sudo apt install jadx"
-    ["frida"]="pip install frida-tools"
-    ["objection"]="pip install objection"
-    ["drozer"]="pip install drozer"
-    ["evil-winrm"]="gem install evil-winrm"
-    ["metasploit-framework"]="N/A"
-    ["msfvenom"]="N/A"
-    ["msfconsole"]="N/A"
-    ["searchsploit"]="sudo apt install exploitdb"
-    ["exploit-db"]="sudo apt install exploitdb"
-    ["beef-xss"]="sudo apt install beef-xss"
-    ["armitage"]="sudo apt install armitage"
-    ["cobalt-strike"]="N/A"
-    ["empire"]="pip install empire"
-    ["powersploit"]="N/A"
-    ["mimikatz"]="N/A"
-    ["responder"]="sudo apt install responder"
-    ["impacket"]="pip install impacket"
-    ["bloodhound"]="pip install bloodhound"
-    ["powerview"]="N/A"
-    ["theharvester"]="pip install theharvester"
-    ["recon-ng"]="pip install recon-ng"
-    ["maltego"]="N/A"
-    ["spiderfoot"]="pip install spiderfoot"
-    ["shodan"]="pip install shodan"
-    ["censys-python"]="pip install censys"
-    ["fierce"]="pip install fierce"
-    ["dnsrecon"]="pip install dnsrecon"
-    ["dnsenum"]="sudo apt install dnsenum"
-    ["dmitry"]="sudo apt install dmitry"
-    ["sherlock"]="pip install sherlock"
-    ["social-analyzer"]="pip install social-analyzer"
-    ["pipl"]="N/A"
-    ["trufflehog"]="pip install trufflehog"
-    ["have-i-been-pwned"]="pip install haveibeenpwned"
-    ["subjack"]="go install github.com/haccer/subjack@latest"
-    ["linpeas"]="N/A"
-    ["winpeas"]="N/A"
-    ["linenum"]="N/A"
-    ["linux-exploit-suggester"]="N/A"
-    ["windows-exploit-suggester"]="N/A"
-    ["privesc-check"]="N/A"
-    ["unix-privesc-check"]="N/A"
-    ["gtfoblookup"]="pip install gtfoblookup"
-    ["aws-cli"]="pip install awscli"
-    ["azure-cli"]="pip install azure-cli"
-    ["gcloud"]="N/A"
-    ["kubectl"]="N/A"
-    ["docker"]="sudo apt install docker.io"
-    ["trivy"]="N/A"
-    ["cloudsplaining"]="pip install cloudsplaining"
-    ["pacu"]="pip install pacu"
-    ["prowler"]="pip install prowler"
-    ["scout-suite"]="pip install scout-suite"
-    ["cloudmapper"]="pip install cloudmapper"
-    ["clair"]="N/A"
-    ["kube-hunter"]="pip install kube-hunter"
-    ["kube-bench"]="N/A"
-    ["docker-bench-security"]="N/A"
-    ["falco"]="N/A"
-    ["checkov"]="pip install checkov"
-    ["terrascan"]="N/A"
-    ["cloudsploit"]="N/A"
-    ["helm"]="N/A"
-    ["istio"]="N/A"
-    ["opa"]="N/A"
-    ["volatility"]="pip install volatility"
-    ["msfvenom-cloud"]="N/A"
-    ["cloudgoat"]="N/A"
-    ["cipher-identifier"]="N/A"
-    ["frequency-analysis"]="N/A"
-    ["rsatool"]="pip install rsatool"
-    ["factordb"]="pip install factordb"
-    ["hashcat-legacy"]="N/A"
-    ["hash-buster"]="N/A"
-    ["findmyhash"]="sudo apt install findmyhash"
-    ["hash-analyzer"]="pip install hash-analyzer"
+    ["Nmap"]="sudo apt install nmap"
+    ["Rustscan"]="sudo apt install rustscan"
+    ["Masscan"]="sudo apt install masscan"
+    ["AutoRecon"]="pipx install git+https://github.com/Tib3rius/AutoRecon.git"
+    ["Amass"]="sudo apt install amass"
+    ["Subfinder"]="sudo apt install subfinder"
+    ["Fierce"]="sudo apt install fierce"
+    ["DNSEnum"]="sudo apt install dnsenum"
+    ["TheHarvester"]="sudo apt install theharvester"
+    ["ARP-Scan"]="sudo apt install arp-scan"
+    ["NBTScan"]="sudo apt install nbtscan"
+    ["RPCClient"]="sudo apt install smbclient"
+    ["Enum4linux"]="sudo apt install enum4linux"
+    ["Enum4linux-ng"]="pipx install enum4linux-ng"
+    ["SMBMap"]="pipx install smbmap"
+    ["Responder"]="sudo apt install responder"
+    ["NetExec"]="pipx install netexec"
+    ["Gobuster"]="sudo apt install gobuster"
+    ["Dirsearch"]="sudo apt install dirsearch"
+    ["Feroxbuster"]="sudo apt install feroxbuster"
+    ["FFuf"]="sudo apt install ffuf"
+    ["Dirb"]="sudo apt install dirb"
+    ["HTTPx"]="sudo apt install httpx-toolkit"
+    ["Katana"]="sudo apt install katana"
+    ["Hakrawler"]="go install github.com/hakluke/hakrawler@latest"
+    ["Gau"]="go install github.com/lc/gau/v2/cmd/gau@latest"
+    ["Waybackurls"]="go install github.com/tomnomnom/waybackurls@latest"
+    ["Nuclei"]="sudo apt install nuclei"
+    ["Nikto"]="sudo apt install nikto"
+    ["SQLMap"]="sudo apt install sqlmap"
+    ["WPScan"]="sudo apt install wpscan"
+    ["Arjun"]="sudo apt install arjun"
+    ["ParamSpider"]="pipx install paramspider"
+    ["X8"]="N/A"
+    ["Jaeles"]="go install github.com/jaeles-project/jaeles@latest"
+    ["Dalfox"]="sudo apt install dalfox"
+    ["Wafw00f"]="sudo apt install wafw00f"
+    ["TestSSL"]="sudo apt install testssl.sh"
+    ["SSLScan"]="sudo apt install sslscan"
+    ["SSLyze"]="pipx install sslyze"
+    ["Anew"]="go install github.com/tomnomnom/anew@latest"
+    ["QSReplace"]="go install github.com/tomnomnom/qsreplace@latest"
+    ["Uro"]="pipx install uro"
+    ["Whatweb"]="sudo apt install whatweb"
+    ["JWT-Tool"]="pipx install jwt_tool"
+    ["GraphQL-Voyager"]="N/A"
+    ["Burp Suite Extensions"]="N/A"
+    ["ZAP Proxy"]="sudo apt install zaproxy"
+    ["Wfuzz"]="pipx install wfuzz"
+    ["Commix"]="pipx install commix"
+    ["NoSQLMap"]="pipx install nosqlmap"
+    ["Tplmap"]="pipx install tplmap"
+    ["Hydra"]="sudo apt install hydra"
+    ["John the Ripper"]="sudo apt install john"
+    ["Hashcat"]="sudo apt install hashcat"
+    ["Medusa"]="sudo apt install medusa"
+    ["Patator"]="sudo apt install patator"
+    ["Evil-WinRM"]="gem install evil-winrm"
+    ["Hash-Identifier"]="sudo apt install hash-identifier"
+    ["HashID"]="pipx install hashid"
+    ["CrackStation"]="N/A"
+    ["Ophcrack"]="sudo apt install ophcrack"
+    ["GDB"]="sudo apt install gdb"
+    ["GDB-PEDA"]="N/A"
+    ["GDB-GEF"]="N/A"
+    ["Radare2"]="sudo apt install radare2"
+    ["Ghidra"]="sudo apt install ghidra"
+    ["IDA Free"]="N/A"
+    ["Binary Ninja"]="N/A"
+    ["Binwalk"]="sudo apt install binwalk"
+    ["ROPgadget"]="pipx install ropgadget"
+    ["Ropper"]="pipx install ropper"
+    ["One-Gadget"]="gem install one_gadget"
+    ["Checksec"]="sudo apt install checksec"
+    ["Strings"]="sudo apt install binutils"
+    ["Objdump"]="sudo apt install binutils"
+    ["Readelf"]="sudo apt install binutils"
+    ["XXD"]="sudo apt install xxd"
+    ["Hexdump"]="sudo apt install bsdmainutils"
+    ["Pwntools"]="pipx install pwntools"
+    ["Angr"]="pipx install angr"
+    ["Libc-Database"]="N/A"
+    ["Pwninit"]="pipx install pwninit"
+    ["Volatility"]="pipx install volatility"
+    ["MSFVenom"]="sudo apt install metasploit-framework"
+    ["UPX"]="sudo apt install upx-ucl"
+    ["Prowler"]="pipx install prowler"
+    ["Scout Suite"]="pipx install scout-suite"
+    ["CloudMapper"]="pipx install cloudmapper"
+    ["Pacu"]="pipx install pacu"
+    ["Trivy"]="sudo apt install trivy"
+    ["Clair"]="N/A"
+    ["Kube-Hunter"]="pipx install kube-hunter"
+    ["Kube-Bench"]="sudo apt install kube-bench"
+    ["Docker Bench Security"]="N/A"
+    ["Falco"]="N/A"
+    ["Checkov"]="pipx install checkov"
+    ["Terrascan"]="N/A"
+    ["CloudSploit"]="N/A"
+    ["AWS CLI"]="sudo apt install awscli"
+    ["Azure CLI"]="pipx install azure-cli"
+    ["GCloud"]="N/A"
+    ["Kubectl"]="sudo apt install kubectl"
+    ["Helm"]="sudo apt install helm"
+    ["Istio"]="N/A"
+    ["OPA"]="N/A"
+    ["Volatility3"]="pipx install volatility3"
+    ["Foremost"]="sudo apt install foremost"
+    ["PhotoRec"]="sudo apt install testdisk"
+    ["TestDisk"]="sudo apt install testdisk"
+    ["Steghide"]="sudo apt install steghide"
+    ["Stegsolve"]="N/A"
+    ["Zsteg"]="gem install zsteg"
+    ["Outguess"]="sudo apt install outguess"
+    ["ExifTool"]="sudo apt install libimage-exiftool-perl"
+    ["Scalpel"]="sudo apt install scalpel"
+    ["Bulk Extractor"]="sudo apt install bulk-extractor"
+    ["Autopsy"]="sudo apt install autopsy"
+    ["Sleuth Kit"]="sudo apt install sleuthkit"
+    ["CyberChef"]="N/A"
+    ["Cipher-Identifier"]="N/A"
+    ["Frequency-Analysis"]="N/A"
+    ["RSATool"]="pipx install rsatool"
+    ["FactorDB"]="pipx install factordb"
+    ["Sherlock"]="pipx install sherlock-project"
+    ["Social-Analyzer"]="pipx install social-analyzer"
+    ["Recon-ng"]="pipx install recon-ng"
+    ["Maltego"]="sudo apt install maltego"
+    ["SpiderFoot"]="pipx install spiderfoot"
+    ["Shodan"]="pipx install shodan"
+    ["Censys"]="pipx install censys"
+    ["Have I Been Pwned"]="pipx install haveibeenpwned"
+    ["Pipl"]="N/A"
+    ["TruffleHog"]="pipx install trufflehog"
 )
 
 # Helper to move cursor to a given location inside the box
@@ -369,37 +398,38 @@ draw_box() {
     printf "╝${NC}"
 }
 
-# Enhanced tool checking function
+# Enhanced tool checking function for Kali Linux
 check_tool() {
     local tool=$1
     local category=${2:-"General"}
     local status="MISSING"
 
+    # Scanning animation
+    local animation_chars="-\\|/"
+    for ((i=0; i<5; i++)); do
+        printf "\r${MATRIX_GREEN}Scanning: ${CYAN}%-20s ${animation_chars:$((i % ${#animation_chars})):1}" "$tool"
+    done
+
+    # Prioritize command -v, which is the most reliable check
     if command -v "$tool" &> /dev/null; then
         status="INSTALLED"
-        INSTALLED_COUNT=$((INSTALLED_COUNT + 1))
+    # Check for pipx installations
+    elif pipx list --short | grep -q "^$tool$"; then
+        status="INSTALLED"
+    # Check for go installations
+    elif [ -f "$HOME/go/bin/$tool" ]; then
+        status="INSTALLED"
+    # Check for python packages
     elif python3 -c "import ${tool//-/_}" &> /dev/null; then
         status="INSTALLED"
-        INSTALLED_COUNT=$((INSTALLED_COUNT + 1))
+    # Check for ruby gems
     elif gem list -i "$tool" &> /dev/null; then
         status="INSTALLED"
-        INSTALLED_COUNT=$((INSTALLED_COUNT + 1))
-    else
-        local locations=(
-            "/usr/bin/$tool" "/usr/local/bin/$tool" "/opt/$tool/bin/$tool" "/opt/$tool"
-            "/snap/bin/$tool" "$HOME/go/bin/$tool" "$HOME/.cargo/bin/$tool"
-            "$HOME/.local/bin/$tool" "/usr/sbin/$tool" "/sbin/$tool"
-        )
-        for location in "${locations[@]}"; do
-            if [ -x "$location" ]; then
-                status="INSTALLED"
-                INSTALLED_COUNT=$((INSTALLED_COUNT + 1))
-                break
-            fi
-        done
     fi
 
-    if [ "$status" == "MISSING" ]; then
+    if [ "$status" == "INSTALLED" ]; then
+        INSTALLED_COUNT=$((INSTALLED_COUNT + 1))
+    else
         MISSING_COUNT=$((MISSING_COUNT + 1))
     fi
 
@@ -431,15 +461,22 @@ show_logo() {
     printf "${NEON_BLUE}"
     for ((i=0; i<CONTENT_WIDTH; i++)); do printf "─"; done
     printf "${NC}"
+
+    local title_y=$((logo_y + 1))
+    local title="🔥 HexStrike Tools Checker 🔥"
+    local title_x=$(( (CONTENT_WIDTH - ${#title}) / 2 ))
+    cur_mov $title_y $((title_x + 2))
+    printf "${BOLD}${NEON_YELLOW}${title}${NC}"
 }
 
 # Main function
 main() {
     trap 'printf "\033[?25h"' EXIT
+    fetch_and_parse_tools
     draw_box
     show_logo
     
-    local content_y=9
+    local content_y=11
     
     local progress_bar_width=$((CONTENT_WIDTH - 2))
     
@@ -479,7 +516,7 @@ main() {
     cur_mov $((content_y + 1)) 3; printf "%*s" $CONTENT_WIDTH ""
 
     # Clear the screen for the report
-    for ((i=content_y; i<BOX_HEIGHT-1; i++)); do
+    for ((i=content_y; i<BOX_HEIGHT-2; i++)); do
         cur_mov $i 3
         printf "%*s" $CONTENT_WIDTH ""
     done
@@ -499,7 +536,13 @@ main() {
     cur_mov $((footer_text_y + 1)) 3
     printf "${DIM}Disclaimer: Tool status may not be 100%% accurate. Please verify manually. Created By 'PureHate'${NC}"
 
-    printf "\033[$(tput lines);1H"
+    while true; do
+        read -n 1 -s -r -t 1 key
+        if [[ $key == "q" ]]; then
+            break
+        fi
+    done
+    printf "\033[?25h"
 }
 
 # Function to display the results in a columnar format
@@ -508,8 +551,12 @@ show_report() {
     
     # Header
     cur_mov $content_y 3
-    printf "${BOLD}${YELLOW}%-25s %-20s %-10s %-30s %-30s${NC}\n" "Category" "Tool" "Status" "Install Command" "Link"
-    content_y=$((content_y + 1))
+    printf "${BOLD}${LIGHT_BLUE}%-22s %-18s %-10s %-30s %s${NC}\n" "Category" "Tool" "Status" "Install Command" "Link"
+    cur_mov $((content_y + 1)) 2
+    printf "${NEON_BLUE}"
+    for ((i=0; i<CONTENT_WIDTH; i++)); do printf "─"; done
+    printf "${NC}"
+    content_y=$((content_y + 2))
 
     for tool_info in "${ALL_TOOLS_STATUS[@]}"; do
         IFS=',' read -r category tool_name status <<< "$tool_info"
@@ -523,7 +570,7 @@ show_report() {
         fi
 
         cur_mov $content_y 3
-        printf "%-25s %-20s ${status_color}%-10s${NC} %-30s %-30s\n" "$category" "$tool_name" "$status" "$install_cmd" "$link"
+        printf "%-22s %-18s ${status_color}%-10s${NC} %-30s %s\n" "$category" "$tool_name" "$status" "$install_cmd" "$link"
         content_y=$((content_y + 1))
         
         if (( content_y >= BOX_HEIGHT - 2 )); then
