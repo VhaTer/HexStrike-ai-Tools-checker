@@ -55,8 +55,8 @@ INSTALLED_TOOLS=()
 # Globals for UI Box
 BOX_START_X=0
 BOX_START_Y=0
-BOX_WIDTH=80
-BOX_HEIGHT=24
+BOX_WIDTH=0
+BOX_HEIGHT=0
 CONTENT_WIDTH=0
 CONTENT_HEIGHT=0
 
@@ -107,36 +107,29 @@ cur_mov() {
 
 # Function to draw the main UI box
 draw_box() {
-    local term_width=$(tput cols)
-    local term_height=$(tput lines)
-
-    local w=$BOX_WIDTH
-    local h=$BOX_HEIGHT
-    ((term_width < w)) && w=$term_width
-    ((term_height < h)) && h=$term_height
-
-    BOX_WIDTH=$w
-    BOX_HEIGHT=$h
-    CONTENT_WIDTH=$((w - 4))
-    CONTENT_HEIGHT=$((h - 2))
-    BOX_START_X=$(( (term_width - w) / 2 ))
-    BOX_START_Y=$(( (term_height - h) / 2 ))
+    BOX_WIDTH=$(tput cols)
+    BOX_HEIGHT=$(tput lines)
+    CONTENT_WIDTH=$((BOX_WIDTH - 4))
+    CONTENT_HEIGHT=$((BOX_HEIGHT - 2))
+    # Use 1-based indexing for cursor positioning.
+    BOX_START_X=1
+    BOX_START_Y=1
     
     printf "\033[2J\033[?25l"
 
     cur_mov 0 0
     printf "${NEON_BLUE}╔"
-    for ((i=1; i<w-1; i++)); do printf "═"; done
+    for ((i=1; i<BOX_WIDTH-1; i++)); do printf "═"; done
     printf "╗"
 
-    for ((i=1; i<h-1; i++)); do
+    for ((i=1; i<BOX_HEIGHT-1; i++)); do
         cur_mov $i 0; printf "║"
-        cur_mov $i $((w-1)); printf "║"
+        cur_mov $i $((BOX_WIDTH-1)); printf "║"
     done
 
-    cur_mov $((h-1)) 0
+    cur_mov $((BOX_HEIGHT-1)) 0
     printf "╚"
-    for ((i=1; i<w-1; i++)); do printf "═"; done
+    for ((i=1; i<BOX_WIDTH-1; i++)); do printf "═"; done
     printf "╝${NC}"
 }
 
