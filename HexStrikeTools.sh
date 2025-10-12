@@ -5,7 +5,7 @@
 # Version 6.2 - UI Refactor
 
 # ╔══════════════════════════════════════════════════════════════════════════════╗
-# ║                    FUTURISTIC COLOR & EFFECTS SYSTEM                        ║
+# ║                    FUTURISTIC COLOR & EFFECTS SYSTEM                         ║
 # ╚══════════════════════════════════════════════════════════════════════════════╝
 
 # Advanced Color Palette - Cyberpunk Theme
@@ -184,19 +184,31 @@ calculate_total_tools() {
     done
 }
 
+show_logo() {
+    local logo_y=1
+    local logo_x=$(( (CONTENT_WIDTH - 70) / 2 ))
+    
+    cur_mov $((logo_y++)) $((logo_x)); printf "${NEON_BLUE}  / / / /${NC}  ${NEON_PINK}__  __     ${NC}__                           ${NEON_BLUE}/ / / /${NC}"
+    cur_mov $((logo_y++)) $((logo_x)); printf "${NEON_BLUE} / / / /${NC}   ${NEON_PINK}/ / / /__  ${NC}/ /___  _________ ________  ____${NEON_BLUE}/ / / /${NC}"
+    cur_mov $((logo_y++)) $((logo_x)); printf "${NEON_BLUE}/ / / /${NC}    ${NEON_PINK}/ /_/ / _ \\${NC}/ / __ \\/ ___/ __ \`/ ___/ / / / __ \\  ${NEON_BLUE}/ / / /${NC}"
+    cur_mov $((logo_y++)) $((logo_x)); printf "${NEON_BLUE} / / / /${NC}   ${NEON_PINK}/ __  /  __/${NC}/ / / / /__/ /_/ / /  / /_/ / / / / ${NEON_BLUE}/ / / /${NC}"
+    cur_mov $((logo_y++)) $((logo_x)); printf "${NEON_BLUE}/ / / /${NC}    ${NEON_PINK}/_/ /_/\\___/${NC}/_/_/ /_/\\___/\\__,_/_/   \\__,_/_/ /_/  ${NEON_BLUE}/ / / /${NC}"
+    cur_mov $((logo_y++)) $((logo_x)); printf "${NC}                                                        "
+    
+    logo_y=$((logo_y + 1))
+    cur_mov $((logo_y)) 2
+    printf "${NEON_BLUE}"
+    for ((i=0; i<CONTENT_WIDTH; i++)); do printf "─"; done
+    printf "${NC}"
+}
+
 # Main function
 main() {
     trap 'printf "\033[?25h"' EXIT
     draw_box
+    show_logo
     
-    local content_y=1
-    
-    local title="🔥 HexStrike Tools Checker 🔥"
-    local title_x=$(( (CONTENT_WIDTH - ${#title}) / 2 ))
-    cur_mov $content_y $((title_x + 2))
-    printf "${BOLD}${NEON_YELLOW}${title}${NC}"
-    
-    content_y=$((content_y + 2))
+    local content_y=9
     
     local progress_bar_width=$((CONTENT_WIDTH - 2))
     
@@ -204,6 +216,11 @@ main() {
     local current=0
     
     for category in "${!TOOLS[@]}"; do
+        local category_progress_y=$((content_y))
+        cur_mov $category_progress_y 3
+        printf "%*s\r" $CONTENT_WIDTH ""
+        printf "${BOLD}${CYBER_CYAN}Scanning Category: ${YELLOW}${category}${NC}"
+
         for tool in ${TOOLS[$category]}; do
             current=$((current + 1))
             check_tool "$tool" "$category"
@@ -211,11 +228,13 @@ main() {
             local percentage=$(( (current * 100) / TOTAL_COUNT ))
             local filled_width=$(( (percentage * progress_bar_width) / 100 ))
 
-            cur_mov $content_y 3
+            local tool_progress_y=$((content_y + 1))
+            cur_mov $tool_progress_y 3
             printf "%*s\r" $CONTENT_WIDTH ""
-            printf "${MATRIX_GREEN}Scanning: ${CYAN}%-20s ${NEON_ORANGE}[%s/%s]${NC}" "$tool" "$current" "$TOTAL_COUNT"
+            printf "${MATRIX_GREEN}Checking: ${CYAN}%-20s ${NEON_ORANGE}[%s/%s]${NC}" "$tool" "$current" "$TOTAL_COUNT"
 
-            cur_mov $((content_y + 1)) 3
+            local bar_y=$((content_y + 2))
+            cur_mov $bar_y 3
             printf "%*s\r" $CONTENT_WIDTH ""
             printf "${NEON_BLUE}["
             for ((i=0; i<filled_width; i++)); do printf "█"; done
@@ -249,29 +268,40 @@ main() {
     cur_mov $content_y 3
     printf "${BOLD}🔍 Missing Tools & Install Links:${NC}"
     
-    local max_missing_tools=$((CONTENT_HEIGHT - content_y))
+    local list_y=$((content_y + 1))
+    local max_missing_tools=$((BOX_HEIGHT - list_y - 3))
     local count=0
-    for tool_info in "${MISSING_TOOLS[@]}"; do
-        if (( count + content_y + 1 < BOX_HEIGHT - 1 )); then
-             cur_mov $((content_y + count + 1)) 3
-             printf "%*s\r" $CONTENT_WIDTH ""
-        fi
 
-        if [ $count -ge $max_missing_tools ]; then
+    for tool_info in "${MISSING_TOOLS[@]}"; do
+        if (( count >= max_missing_tools )); then
+            cur_mov $((list_y + count)) 3
+            printf "%*s\r" $CONTENT_WIDTH ""
             printf "${DIM}... and $(( ${#MISSING_TOOLS[@]} - count )) more${NC}"
             break
         fi
+        
+        cur_mov $((list_y + count)) 3
+        printf "%*s\r" $CONTENT_WIDTH ""
         
         local tool_name="${tool_info%%:*}"
         local link=${TOOL_LINKS[$tool_name]}
         if [ -z "$link" ]; then
             link="N/A"
         fi
-
+        
         printf "${CROSS_MARK} %-30s ${NEON_PURPLE}${link}${NC}" "$tool_name"
         ((count++))
     done
+
+    local footer_y=$((BOX_HEIGHT - 2))
+    cur_mov $footer_y 2
+    printf "${NEON_BLUE}"
+    for ((i=0; i<CONTENT_WIDTH; i++)); do printf "─"; done
+    printf "${NC}"
     
+    cur_mov $((footer_y + 1)) 3
+    printf "A tool to verify your pentesting toolkit. For more info, visit: ${UNDERLINE}https://github.com/HexStrike-AI/HexStrike${NC}"
+
     printf "\033[$(tput lines);1H"
 }
 
