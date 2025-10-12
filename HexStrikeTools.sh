@@ -110,7 +110,7 @@ PROGRESS_SPARK="◆"
 # Animated Characters for Loading
 SPINNER_CHARS=("◐" "◓" "◑" "◒")
 PULSE_CHARS=("●" "◉" "○" "◯")
-WAVE_CHARS=("▁" "▂" "▃" "▄" "▅" "▆" "▇" "█")
+WAVE_CHARS=(" " "▂" "▃" "▄" "▅" "▆" "▇" "█")
 
 # Matrix Rain Effect Characters
 MATRIX_CHARS=("0" "1" "ア" "カ" "サ" "タ" "ナ" "ハ" "マ" "ヤ" "ラ" "ワ")
@@ -202,6 +202,27 @@ TOOLS=(
     ["Cryptography & Hash Analysis"]="cipher-identifier frequency-analysis rsatool factordb hashcat-legacy hash-buster findmyhash hash-analyzer"
 )
 
+declare -A TOOL_LINKS
+TOOL_LINKS=(
+    ["nmap"]="https://nmap.org/download.html"
+    ["masscan"]="https://github.com/robertdavidgraham/masscan"
+    ["amass"]="https://github.com/OWASP/Amass/wiki/Installation-Guide"
+    ["sqlmap"]="https://github.com/sqlmapproject/sqlmap"
+    ["wpscan"]="https://wpscan.com/how-to-install-wpscan/"
+    ["zaproxy"]="https://www.zaproxy.org/download/"
+    ["hydra"]="https://www.ssec.wisc.edu/hydra/download.html"
+    ["john"]="https://www.openwall.com/john/"
+    ["hashcat"]="https://hashcat.net/hashcat/"
+    ["radare2"]="https://rada.re/n/radare2.html"
+    ["binwalk"]="https://github.com/ReFirmLabs/binwalk"
+    ["ghidra"]="https://ghidra-sre.org/"
+    ["theharvester"]="https://github.com/laramies/theHarvester"
+    ["recon-ng"]="https://github.com/lanmaster53/recon-ng"
+    ["maltego"]="https://www.maltego.com/downloads/"
+    ["arjun"]="https://github.com/s0md3v/Arjun"
+    ["nikto"]="https://github.com/sullo/nikto"
+    ["uniscan"]="https://github.com/poerschke/Uniscan"
+)
 
 # Check if curl is available
 CURL_AVAILABLE=false
@@ -597,11 +618,17 @@ show_summary() {
     # Missing tools section
     if [ ${#MISSING_TOOLS[@]} -gt 0 ]; then
         echo -e "\n  ${BOLD}🔍 Missing Tools (${#MISSING_TOOLS[@]}):${NC}"
+        printf "\n  %-30s %-10s %-50s\n" "Tool" "Status" "Installation Link"
+        printf "  %-30s %-10s %-50s\n" "----" "------" "-------------------"
         local count=0
         for tool_info in "${MISSING_TOOLS[@]}"; do
             local tool_name="${tool_info%%:*}"
             local category="${tool_info#*:}"
-            printf "  ${CROSS_MARK} %-30s ${DIM}%s${NC}\n" "$tool_name" "($category)"
+            local link=${TOOL_LINKS[$tool_name]}
+            if [ -z "$link" ]; then
+                link="N/A"
+            fi
+            printf "  ${CROSS_MARK} %-30s ${RED}%-10s${NC} %-50s\n" "$tool_name" "Missing" "$link"
             ((count++))
             [ $count -ge 10 ] && [ $count -lt ${#MISSING_TOOLS[@]} ] && {
                 echo -e "  ${DIM}... and $(( ${#MISSING_TOOLS[@]} - count )) more${NC}"
@@ -689,133 +716,19 @@ show_installation_commands() {
         ["hashcat"]="Advanced password recovery"
     )
     
-    # Categorize missing tools by package manager
-    for tool in "${MISSING_TOOLS[@]}"; do
-        # Extract tool name from "tool:category" format
-        pkg_name="${tool%%:*}"
-        
-        # Special cases where package name differs from command
-        case $pkg_name in
-            "metasploit-framework"|"msfvenom"|"msfconsole") pkg_name="metasploit-framework" ;;
-            "beef-xss") pkg_name="beef-xss" ;;
-            "armitage") pkg_name="armitage" ;;
-            "cobalt-strike") pkg_name="cobaltstrike" ;;
-            "empire") pkg_name="powershell-empire" ;;
-            "powersploit") pkg_name="powersploit" ;;
-            "mimikatz") pkg_name="mimikatz" ;;
-            "bloodhound") pkg_name="bloodhound" ;;
-            "powerview") pkg_name="powersploit" ;;
-            "theHarvester") pkg_name="theharvester" ;;
-            "recon-ng") pkg_name="recon-ng" ;;
-            "maltego") pkg_name="maltego" ;;
-            "spiderfoot") pkg_name="spiderfoot" ;;
-            "shodan") pkg_name="shodan" ;;
-            "censys-python") pkg_name="censys" ;;
-            "sherlock") pkg_name="sherlock" ;;
-            "social-analyzer") pkg_name="social-analyzer" ;;
-            "have-i-been-pwned") pkg_name="pwned" ;;
-            "linpeas"|"winpeas") pkg_name="peass-ng" ;;
-            "linenum") pkg_name="linux-exploit-suggester" ;;
-            "aws-cli") pkg_name="awscli" ;;
-            "azure-cli") pkg_name="azure-cli" ;;
-            "gcloud") pkg_name="google-cloud-sdk" ;;
-            "docker") pkg_name="docker.io" ;;
-            "volatility") pkg_name="volatility" ;;
-        esac
-        
-        # Add to appropriate package manager's list
-        if [[ " ${APT_TOOLS[@]} " =~ " ${pkg_name} " ]]; then
-            packages["apt"]+=" $pkg_name"
-        elif [[ " ${SNAP_TOOLS[@]} " =~ " ${pkg_name} " ]]; then
-            packages["snap"]+=" $pkg_name"
-        elif [[ " ${PIP_TOOLS[@]} " =~ " ${pkg_name} " ]]; then
-            packages["pip"]+=" $pkg_name"
-        elif [[ " ${GEM_TOOLS[@]} " =~ " ${pkg_name} " ]]; then
-            packages["gem"]+=" $pkg_name"
-        elif [[ " ${GO_TOOLS[@]} " =~ " ${pkg_name} " ]]; then
-            packages["go"]+=" $pkg_name"
-        elif [[ " ${CUSTOM_TOOLS[@]} " =~ " ${pkg_name} " ]]; then
-            packages["custom"]+=" $pkg_name"
-        else
-            packages["unknown"]+=" $pkg_name"
+    # Display installation commands with better formatting
+    echo -e "${CYAN}${BOLD}📋 Installation Commands${NC}"
+    echo -e "${CYAN}──────────────────────────${NC}"
+    
+    for tool_info in "${MISSING_TOOLS[@]}"; do
+        local tool_name="${tool_info%%:*}"
+        local link=${TOOL_LINKS[$tool_name]}
+        if [ ! -z "$link" ]; then
+            echo -e "\n${GREEN}${BOLD}🔧 To install ${tool_name}, visit:${NC} ${link}"
         fi
     done
     
-    # Display installation commands with better formatting
-    echo -e "${CYAN}${BOLD}📋 Package Manager Commands${NC}"
-    echo -e "${CYAN}──────────────────────────${NC}"
-    
-    # APT packages
-    if [ ! -z "${packages[apt]}" ]; then
-        echo -e "\n${GREEN}${BOLD}🔧 APT (System Packages):${NC}"
-        echo -e "Run the following command to install via APT:"
-        echo -e "${BOLD}sudo apt update && sudo apt install -y${packages[apt]}${NC}"
-        echo -e "  ${DIM}# Update and install system packages${NC}\n"
-    fi
-    
-    # Snap packages
-    if [ ! -z "${packages[snap]}" ]; then
-        echo -e "\n${GREEN}${BOLD}📦 SNAP (Universal Packages):${NC}"
-        echo -e "Run the following commands to install via Snap:"
-        for pkg in $(echo ${packages[snap]} | tr ' ' '\n' | sort -u); do
-            echo -e "${BOLD}sudo snap install $pkg --classic${NC}"
-            if [ ! -z "${descriptions[$pkg]}" ]; then
-                echo -e "  ${DIM}# ${descriptions[$pkg]}${NC}"
-            fi
-        done
-        echo
-    fi
-    
-    # PIP packages
-    if [ ! -z "${packages[pip]}" ]; then
-        echo -e "\n${GREEN}${BOLD}🐍 PIP (Python Packages):${NC}"
-        echo -e "Run the following command to install via PIP:"
-        echo -e "${BOLD}pip3 install --user${packages[pip]}${NC}"
-        echo -e "  ${DIM}# Install Python packages for the current user${NC}\n"
-    fi
-    
-    # GEM packages
-    if [ ! -z "${packages[gem]}" ]; then
-        echo -e "\n${GREEN}${BOLD}💎 GEM (Ruby Gems):${NC}"
-        echo -e "Run the following command to install via GEM:"
-        echo -e "${BOLD}sudo gem install${packages[gem]}${NC}\n"
-    fi
-    
-    # GO packages
-    if [ ! -z "${packages[go]}" ]; then
-        echo -e "\n${GREEN}${BOLD}🐹 GO (Go Packages):${NC}"
-        echo -e "Run the following commands to install Go tools:"
-        for pkg in $(echo ${packages[go]} | tr ' ' '\n' | sort -u); do
-            echo -e "${BOLD}go install $pkg@latest${NC}"
-            if [ ! -z "${descriptions[$pkg]}" ]; then
-                echo -e "  ${DIM}# ${descriptions[$pkg]}${NC}"
-            fi
-        done
-        echo -e "${DIM}# Make sure $GOPATH/bin is in your PATH${NC}\n"
-    fi
-    
-    # Custom installations
-    if [ ! -z "${packages[custom]}" ]; then
-        echo -e "\n${YELLOW}${BOLD}🔧 Custom Installations Required:${NC}"
-        for pkg in $(echo ${packages[custom]} | tr ' ' '\n' | sort -u); do
-            echo -e "${YELLOW}${BOLD}$pkg${NC}"
-            if [ ! -z "${descriptions[$pkg]}" ]; then
-                echo -e "  ${DIM}${descriptions[$pkg]}${NC}"
-            fi
-            echo -e "  ${DIM}Please refer to the official documentation for installation instructions.${NC}\n"
-        done
-    fi
-    
-    # Unknown packages
-    if [ ! -z "${packages[unknown]}" ]; then
-        echo -e "\n${RED}${BOLD}❓ Manual Installation Required:${NC}"
-        echo -e "${YELLOW}The following tools require manual installation:${NC}"
-        for pkg in ${packages[unknown]}; do
-            echo -e "  • ${RED}$pkg${NC}"
-        done
-        echo -e "\n${CYAN}${BOLD}📖 Please refer to the official documentation for installation instructions.${NC}"
-        echo
-    fi
+    echo -e "\n${RED}${BOLD}❓ For other tools, please refer to their official documentation for installation instructions.${NC}"
     
     # Final notes
     echo -e "${CYAN}${BOLD}📝 Additional Notes:${NC}"
