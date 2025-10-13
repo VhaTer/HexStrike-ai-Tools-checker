@@ -2,55 +2,26 @@
 
 # HexStrike AI - Tools Verification Script (V6 Complete Edition)
 # Based on Official HexStrike-Ai V6 README - 200+ tools coverage
-# Version 6.2 - UI Refactor
+# Version 6.3 - Hardcoded Tools & UI Enhancements
 
 # ╔══════════════════════════════════════════════════════════════════════════════╗
 # ║                    FUTURISTIC COLOR & EFFECTS SYSTEM                        ║
 # ╚══════════════════════════════════════════════════════════════════════════════╝
 
-# Advanced Color Palette - Cyberpunk Theme
+# Red Team Color Palette
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
-MAGENTA='\033[0;35m'
+PURPLE='\033[0;35m'
 CYAN='\033[0;36m'
 WHITE='\033[1;37m'
-GRAY='\033[0;37m'
-ORANGE='\033[0;33m'
-PURPLE='\033[0;35m'
 NC='\033[0m'
 
-# Additional Stylish Colors
-LIGHT_RED='\033[1;31m'
-LIGHT_GREEN='\033[1;32m'
-LIGHT_YELLOW='\033[1;33m'
-LIGHT_BLUE='\033[1;34m'
-LIGHT_MAGENTA='\033[1;35m'
-LIGHT_CYAN='\033[1;36m'
-DARK_GRAY='\033[1;30m'
-
-# Neon Colors - Futuristic Glow Effect
-NEON_GREEN='\033[38;5;46m'
-NEON_BLUE='\033[38;5;51m'
-NEON_PINK='\033[38;5;201m'
-NEON_PURPLE='\033[38;5;129m'
-NEON_ORANGE='\033[38;5;208m'
-NEON_YELLOW='\033[38;5;226m'
-ELECTRIC_BLUE='\033[38;5;27m'
-MATRIX_GREEN='\033[38;5;40m'
-CYBER_CYAN='\033[38;5;87m'
-PLASMA_PURPLE='\033[38;5;93m'
-
-# Text Styles & Effects
-BOLD='\033[1m'
-DIM='\033[2m'
-UNDERLINE='\033[4m'
-STRIKETHROUGH='\033[9m'
-
-# Futuristic Status Icons & Symbols
-CHECK_MARK="${NEON_GREEN}◉${NC}"
-CROSS_MARK="${NEON_PINK}◎${NC}"
+# Pre-computed tool lists for performance
+PIPX_INSTALLED_TOOLS=()
+GEM_INSTALLED_TOOLS=()
+PYTHON_INSTALLED_MODULES=()
 
 # Initialize counters
 INSTALLED_COUNT=0
@@ -68,22 +39,15 @@ BOX_HEIGHT=0
 CONTENT_WIDTH=0
 CONTENT_HEIGHT=0
 
-# Function to fetch and parse the tool list from the README
-fetch_and_parse_tools() {
-    local url="https://raw.githubusercontent.com/0x4m4/hexstrike-ai/refs/heads/master/README.md"
-    local readme_content=$(curl -s "$url")
-
-    # Use awk to parse the content and populate the TOOLS array
-    while IFS= read -r line; do
-        if [[ "$line" =~ ^"###" ]]; then
-            current_category=$(echo "$line" | sed -e 's/^### //' -e 's/ (.*//')
-        elif [[ "$line" =~ ^"-" ]]; then
-            tool_name=$(echo "$line" | awk -F'**' '{print $2}')
-            if [ -n "$tool_name" ]; then
-                TOOLS[$current_category]+="$tool_name "
-            fi
-        fi
-    done <<< "$(echo "$readme_content" | awk '/## Security Tools Arsenal/,/---/')"
+# Hardcoded Tool Definitions
+initialize_tools() {
+    TOOLS["Network Reconnaissance & Scanning"]="Nmap|Rustscan|Masscan|AutoRecon|Amass|Subfinder|Fierce|DNSEnum|TheHarvester|ARP-Scan|NBTScan|RPCClient|Enum4linux|Enum4linux-ng|SMBMap|Responder|NetExec"
+    TOOLS["Web Application Security Testing"]="Gobuster|Dirsearch|Feroxbuster|FFuf|Dirb|HTTPx|Katana|Hakrawler|Gau|Waybackurls|Nuclei|Nikto|SQLMap|WPScan|Arjun|ParamSpider|X8|Jaeles|Dalfox|Wafw00f|TestSSL|SSLScan|SSLyze|Anew|QSReplace|Uro|Whatweb|JWT-Tool|GraphQL-Voyager|Burp Suite Extensions|ZAP Proxy|Wfuzz|Commix|NoSQLMap|Tplmap"
+    TOOLS["Authentication & Password Security"]="Hydra|John the Ripper|Hashcat|Medusa|Patator|NetExec|SMBMap|Evil-WinRM|Hash-Identifier|HashID|CrackStation|Ophcrack"
+    TOOLS["Binary Analysis & Reverse Engineering"]="GDB|GDB-PEDA|GDB-GEF|Radare2|Ghidra|IDA Free|Binary Ninja|Binwalk|ROPgadget|Ropper|One-Gadget|Checksec|Strings|Objdump|Readelf|XXD|Hexdump|Pwntools|Angr|Libc-Database|Pwninit|Volatility|MSFVenom|UPX"
+    TOOLS["Cloud & Container Security"]="Prowler|Scout Suite|CloudMapper|Pacu|Trivy|Clair|Kube-Hunter|Kube-Bench|Docker Bench Security|Falco|Checkov|Terrascan|CloudSploit|AWS CLI|Azure CLI|GCloud|Kubectl|Helm|Istio|OPA"
+    TOOLS["CTF & Forensics Tools"]="Volatility|Volatility3|Foremost|PhotoRec|TestDisk|Steghide|Stegsolve|Zsteg|Outguess|ExifTool|Binwalk|Scalpel|Bulk Extractor|Autopsy|Sleuth Kit|John the Ripper|Hashcat|Hash-Identifier|CyberChef|Cipher-Identifier|Frequency-Analysis|RSATool|FactorDB"
+    TOOLS["Bug Bounty & OSINT Arsenal"]="Amass|Subfinder|Hakrawler|HTTPx|ParamSpider|Aquatone|Subjack|DNSEnum|Fierce|TheHarvester|Sherlock|Social-Analyzer|Recon-ng|Maltego|SpiderFoot|Shodan|Censys|Have I Been Pwned|Pipl|TruffleHog"
 }
 
 # Centralized Tool Definitions
@@ -225,6 +189,122 @@ TOOL_LINKS=(
     ["Have I Been Pwned"]="https://haveibeenpwned.com/"
     ["Pipl"]="https://pipl.com/"
     ["TruffleHog"]="https://github.com/trufflesecurity/truffleHog"
+)
+
+declare -A TOOL_EXECUTABLES
+TOOL_EXECUTABLES=(
+    ["Nmap"]="nmap"
+    ["Rustscan"]="rustscan"
+    ["Masscan"]="masscan"
+    ["AutoRecon"]="autorecon"
+    ["Amass"]="amass"
+    ["Subfinder"]="subfinder"
+    ["Fierce"]="fierce"
+    ["DNSEnum"]="dnsenum"
+    ["TheHarvester"]="theharvester"
+    ["ARP-Scan"]="arp-scan"
+    ["NBTScan"]="nbtscan"
+    ["RPCClient"]="rpcclient"
+    ["Enum4linux"]="enum4linux"
+    ["Enum4linux-ng"]="enum4linux-ng"
+    ["SMBMap"]="smbmap"
+    ["Responder"]="responder"
+    ["NetExec"]="netexec"
+    ["Gobuster"]="gobuster"
+    ["Dirsearch"]="dirsearch"
+    ["Feroxbuster"]="feroxbuster"
+    ["FFuf"]="ffuf"
+    ["Dirb"]="dirb"
+    ["HTTPx"]="httpx"
+    ["Katana"]="katana"
+    ["Hakrawler"]="hakrawler"
+    ["Gau"]="gau"
+    ["Waybackurls"]="waybackurls"
+    ["Nuclei"]="nuclei"
+    ["Nikto"]="nikto"
+    ["SQLMap"]="sqlmap"
+    ["WPScan"]="wpscan"
+    ["Arjun"]="arjun"
+    ["ParamSpider"]="paramspider"
+    ["X8"]="x8"
+    ["Jaeles"]="jaeles"
+    ["Dalfox"]="dalfox"
+    ["Wafw00f"]="wafw00f"
+    ["TestSSL"]="testssl.sh"
+    ["SSLScan"]="sslscan"
+    ["SSLyze"]="sslyze"
+    ["Anew"]="anew"
+    ["QSReplace"]="qsreplace"
+    ["Uro"]="uro"
+    ["Whatweb"]="whatweb"
+    ["JWT-Tool"]="jwt_tool"
+    ["ZAP Proxy"]="zaproxy"
+    ["Wfuzz"]="wfuzz"
+    ["Commix"]="commix"
+    ["NoSQLMap"]="nosqlmap"
+    ["Tplmap"]="tplmap"
+    ["Hydra"]="hydra"
+    ["John the Ripper"]="john"
+    ["Hashcat"]="hashcat"
+    ["Medusa"]="medusa"
+    ["Patator"]="patator"
+    ["Evil-WinRM"]="evil-winrm"
+    ["Hash-Identifier"]="hash-identifier"
+    ["HashID"]="hashid"
+    ["Ophcrack"]="ophcrack"
+    ["GDB"]="gdb"
+    ["Radare2"]="radare2"
+    ["Ghidra"]="ghidra"
+    ["Binwalk"]="binwalk"
+    ["ROPgadget"]="ROPgadget.py"
+    ["Ropper"]="ropper"
+    ["One-Gadget"]="one_gadget"
+    ["Checksec"]="checksec"
+    ["Strings"]="strings"
+    ["Objdump"]="objdump"
+    ["Readelf"]="readelf"
+    ["XXD"]="xxd"
+    ["Hexdump"]="hexdump"
+    ["Pwntools"]="pwn"
+    ["Angr"]="angr"
+    ["Pwninit"]="pwninit"
+    ["Volatility"]="vol.py"
+    ["MSFVenom"]="msfvenom"
+    ["UPX"]="upx"
+    ["Prowler"]="prowler"
+    ["Trivy"]="trivy"
+    ["Kube-Hunter"]="kube-hunter"
+    ["Kube-Bench"]="kube-bench"
+    ["Checkov"]="checkov"
+    ["AWS CLI"]="aws"
+    ["Azure CLI"]="az"
+    ["GCloud"]="gcloud"
+    ["Kubectl"]="kubectl"
+    ["Helm"]="helm"
+    ["Istio"]="istioctl"
+    ["OPA"]="opa"
+    ["Volatility3"]="vol"
+    ["Foremost"]="foremost"
+    ["PhotoRec"]="photorec"
+    ["TestDisk"]="testdisk"
+    ["Steghide"]="steghide"
+    ["Zsteg"]="zsteg"
+    ["Outguess"]="outguess"
+    ["ExifTool"]="exiftool"
+    ["Scalpel"]="scalpel"
+    ["Bulk Extractor"]="bulk_extractor"
+    ["Autopsy"]="autopsy"
+    ["RSATool"]="rsatool"
+    ["FactorDB"]="factordb-cli"
+    ["Sherlock"]="sherlock"
+    ["Social-Analyzer"]="social-analyzer"
+    ["Recon-ng"]="recon-ng"
+    ["Maltego"]="maltego"
+    ["SpiderFoot"]="spiderfoot"
+    ["Shodan"]="shodan"
+    ["Censys"]="censys"
+    ["Have I Been Pwned"]="pwned"
+    ["TruffleHog"]="trufflehog"
 )
 
 declare -A TOOL_COMMANDS
@@ -383,7 +463,7 @@ draw_box() {
     printf "\033[2J\033[?25l"
 
     cur_mov 0 0
-    printf "${NEON_BLUE}╔"
+    printf "${BLUE}╔"
     for ((i=1; i<BOX_WIDTH-1; i++)); do printf "═"; done
     printf "╗"
 
@@ -398,34 +478,30 @@ draw_box() {
     printf "╝${NC}"
 }
 
-# Enhanced tool checking function for Kali Linux
+# Optimized tool checking function
 check_tool() {
-    local tool=$1
+    local descriptive_name=$1
     local category=${2:-"General"}
     local status="MISSING"
 
-    # Scanning animation
-    local animation_chars="-\\|/"
-    for ((i=0; i<5; i++)); do
-        printf "\r${MATRIX_GREEN}Scanning: ${CYAN}%-20s ${animation_chars:$((i % ${#animation_chars})):1}" "$tool"
-    done
-
-    # Prioritize command -v, which is the most reliable check
-    if command -v "$tool" &> /dev/null; then
-        status="INSTALLED"
-    # Check for pipx installations
-    elif pipx list --short | grep -q "^$tool$"; then
-        status="INSTALLED"
-    # Check for go installations
-    elif [ -f "$HOME/go/bin/$tool" ]; then
-        status="INSTALLED"
-    # Check for python packages
-    elif python3 -c "import ${tool//-/_}" &> /dev/null; then
-        status="INSTALLED"
-    # Check for ruby gems
-    elif gem list -i "$tool" &> /dev/null; then
-        status="INSTALLED"
+    local executable_to_check=${TOOL_EXECUTABLES[$descriptive_name]}
+    local check_names=()
+    if [ -n "$executable_to_check" ]; then
+        check_names+=("$executable_to_check")
+    else
+        check_names+=("$descriptive_name" "${descriptive_name,,}")
     fi
+
+    for name in "${check_names[@]}"; do
+        if command -v "$name" &> /dev/null || \
+           [ -f "$HOME/go/bin/$name" ] || \
+           [[ " ${PIPX_INSTALLED_TOOLS[*]} " =~ " ${name} " ]] || \
+           [[ " ${GEM_INSTALLED_TOOLS[*]} " =~ " ${name} " ]] || \
+           [[ " ${PYTHON_INSTALLED_MODULES[*]} " =~ " ${name//-/_} " ]]; then
+            status="INSTALLED"
+            break
+        fi
+    done
 
     if [ "$status" == "INSTALLED" ]; then
         INSTALLED_COUNT=$((INSTALLED_COUNT + 1))
@@ -433,152 +509,208 @@ check_tool() {
         MISSING_COUNT=$((MISSING_COUNT + 1))
     fi
 
-    ALL_TOOLS_STATUS+=("$category,$tool,$status")
+    ALL_TOOLS_STATUS+=("$category,$descriptive_name,$status")
+}
+
+precompute_installed_tools() {
+    # Get all pipx tools at once
+    mapfile -t PIPX_INSTALLED_TOOLS < <(pipx list --short 2>/dev/null)
+    # Get all gem tools at once
+    mapfile -t GEM_INSTALLED_TOOLS < <(gem list --no-versions 2>/dev/null)
+
+    # Generate a python script to check all modules at once
+    local python_modules_to_check=()
+    for descriptive_name in "${!TOOL_EXECUTABLES[@]}"; do
+        local executable_name=${TOOL_EXECUTABLES[$descriptive_name]}
+        # A simple heuristic: if it's not a clear command, it might be a python module
+        if ! command -v "$executable_name" &>/dev/null && ! [[ "$executable_name" =~ (\.sh|\.py)$ ]]; then
+             python_modules_to_check+=("${executable_name//-/_}")
+        fi
+    done
+
+    # Create and run a python script to check for module existence
+    local check_script_path="/tmp/check_modules.py"
+    cat > "$check_script_path" <<- EOM
+import importlib.util, sys
+found_modules = [m for m in sys.argv[1:] if importlib.util.find_spec(m)]
+print(" ".join(found_modules))
+EOM
+
+    if (( ${#python_modules_to_check[@]} > 0 )); then
+        local found_py_modules
+        found_py_modules=$(python3 "$check_script_path" "${python_modules_to_check[@]}")
+        PYTHON_INSTALLED_MODULES=($found_py_modules)
+    fi
+    rm "$check_script_path"
+}
+
+
+run_all_checks() {
+    local content_y=7
+    local i=0
+    local progress_bar_width=50
+
+    local sorted_categories=()
+    mapfile -t sorted_categories < <(printf "%s\n" "${!TOOLS[@]}" | sort)
+
+    for category in "${sorted_categories[@]}"; do
+        local IFS='|'
+        local tool_list=(${TOOLS[$category]})
+        local num_tools_in_cat=${#tool_list[@]}
+
+        local cat_scan_msg="Scanning Category: ${PURPLE}${category}${NC} ($num_tools_in_cat tools)"
+        cur_mov $content_y 3
+        printf "%-s" "$cat_scan_msg"
+        printf "%*s" $((CONTENT_WIDTH - ${#cat_scan_msg} + 15)) ""
+
+        for tool in "${tool_list[@]}"; do
+            check_tool "$tool" "$category"
+            i=$((i+1))
+
+            local progress=$((i * 100 / TOTAL_COUNT))
+            local filled_width=$((progress * progress_bar_width / 100))
+
+            cur_mov $((content_y + 1)) 3
+            printf "${WHITE}Overall Progress: ${CYAN}["
+            for ((j=0; j<filled_width; j++)); do printf "▉"; done
+            for ((j=filled_width; j<progress_bar_width; j++)); do printf " "; done
+            printf "] %d%% (%d/%d)${NC}" "$progress" "$i" "$TOTAL_COUNT"
+        done
+    done
+
+    # Clear the scanning lines
+    cur_mov $content_y 3; printf "%*s" $CONTENT_WIDTH ""
+    cur_mov $((content_y + 1)) 3; printf "%*s" $CONTENT_WIDTH ""
 }
 
 calculate_total_tools() {
     TOTAL_COUNT=0
     for category in "${!TOOLS[@]}"; do
-        for tool in ${TOOLS[$category]}; do
-            TOTAL_COUNT=$((TOTAL_COUNT + 1))
-        done
+        local IFS='|'
+        local tool_array=(${TOOLS[$category]})
+        TOTAL_COUNT=$((TOTAL_COUNT + ${#tool_array[@]}))
     done
 }
 
 show_logo() {
     local logo_y=1
-    local logo_x=$(( (CONTENT_WIDTH - 70) / 2 ))
+    local logo_x=$(( (CONTENT_WIDTH - 50) / 2 ))
     
-    cur_mov $((logo_y++)) $((logo_x)); printf "${NEON_BLUE}  / / / /${NC}  ${NEON_PINK}__  __     ${NC}__                           ${NEON_BLUE}/ / / /${NC}"
-    cur_mov $((logo_y++)) $((logo_x)); printf "${NEON_BLUE} / / / /${NC}   ${NEON_PINK}/ / / /__  ${NC}/ /___  _________ ________  ____${NEON_BLUE}/ / / /${NC}"
-    cur_mov $((logo_y++)) $((logo_x)); printf "${NEON_BLUE}/ / / /${NC}    ${NEON_PINK}/ /_/ / _ \\${NC}/ / __ \\/ ___/ __ \`/ ___/ / / / __ \\  ${NEON_BLUE}/ / / /${NC}"
-    cur_mov $((logo_y++)) $((logo_x)); printf "${NEON_BLUE} / / / /${NC}   ${NEON_PINK}/ __  /  __/${NC}/ / / / /__/ /_/ / /  / /_/ / / / / ${NEON_BLUE}/ / / /${NC}"
-    cur_mov $((logo_y++)) $((logo_x)); printf "${NEON_BLUE}/ / / /${NC}    ${NEON_PINK}/_/ /_/\\___/${NC}/_/_/ /_/\\___/\\__,_/_/   \\__,_/_/ /_/  ${NEON_BLUE}/ / / /${NC}"
-    cur_mov $((logo_y++)) $((logo_x)); printf "${NC}                                                        "
+    cur_mov $((logo_y++)) $((logo_x)); printf "${RED} __   __   ___   __   _   _   ___   __   __  ${NC}"
+    cur_mov $((logo_y++)) $((logo_x)); printf "${RED}|  | |  | | __| |  \\ | | | | | __| |  \\ |  | ${NC}"
+    cur_mov $((logo_y++)) $((logo_x)); printf "${RED}|  | |  | | __| | D | | | | | __| | D | |  | ${NC}"
+    cur_mov $((logo_y++)) $((logo_x)); printf "${RED}|_\\_/\\_/  |___| |__/  |_| |_| |___| |__/  |__| ${NC}"
     
     logo_y=$((logo_y + 1))
     cur_mov $((logo_y)) 2
-    printf "${NEON_BLUE}"
+    printf "${RED}"
     for ((i=0; i<CONTENT_WIDTH; i++)); do printf "─"; done
     printf "${NC}"
-
-    local title_y=$((logo_y + 1))
-    local title="🔥 HexStrike Tools Checker 🔥"
-    local title_x=$(( (CONTENT_WIDTH - ${#title}) / 2 ))
-    cur_mov $title_y $((title_x + 2))
-    printf "${BOLD}${NEON_YELLOW}${title}${NC}"
 }
 
 # Main function
 main() {
     trap 'printf "\033[?25h"' EXIT
-    fetch_and_parse_tools
+    initialize_tools
+    calculate_total_tools
+    precompute_installed_tools
+
     draw_box
     show_logo
-    
-    local content_y=11
-    
-    local progress_bar_width=$((CONTENT_WIDTH - 2))
-    
-    calculate_total_tools
-    local current=0
-    
-    for category in "${!TOOLS[@]}"; do
-        local category_progress_y=$((content_y))
-        cur_mov $category_progress_y 3
-        printf "%*s\r" $CONTENT_WIDTH ""
-        printf "${BOLD}${CYBER_CYAN}Scanning Category: ${YELLOW}${category}${NC}"
 
-        for tool in ${TOOLS[$category]}; do
-            current=$((current + 1))
-            check_tool "$tool" "$category"
+    run_all_checks
 
-            local percentage=$(( (current * 100) / TOTAL_COUNT ))
-            local filled_width=$(( (percentage * progress_bar_width) / 100 ))
-
-            local tool_progress_y=$((content_y + 1))
-            cur_mov $tool_progress_y 3
-            printf "%*s\r" $CONTENT_WIDTH ""
-            printf "${MATRIX_GREEN}Checking: ${CYAN}%-20s ${NEON_ORANGE}[%s/%s]${NC}" "$tool" "$current" "$TOTAL_COUNT"
-
-            local bar_y=$((content_y + 2))
-            cur_mov $bar_y 3
-            printf "%*s\r" $CONTENT_WIDTH ""
-            printf "${NEON_BLUE}["
-            for ((i=0; i<filled_width; i++)); do printf "█"; done
-            printf "%*s" $((progress_bar_width - filled_width)) ""
-            printf "] ${NEON_YELLOW}${percentage}%%${NC}"
-        done
-    done
-    
-    # Clear the progress bar lines
-    cur_mov $content_y 3; printf "%*s" $CONTENT_WIDTH ""
-    cur_mov $((content_y + 1)) 3; printf "%*s" $CONTENT_WIDTH ""
-
-    # Clear the screen for the report
-    for ((i=content_y; i<BOX_HEIGHT-2; i++)); do
-        cur_mov $i 3
-        printf "%*s" $CONTENT_WIDTH ""
-    done
-
+    local content_y=7
     show_report "$content_y"
-
-    local footer_y=$((BOX_HEIGHT - 2))
-    cur_mov $footer_y 2
-    printf "${NEON_BLUE}"
-    for ((i=0; i<CONTENT_WIDTH; i++)); do printf "─"; done
-    printf "${NC}"
     
-    local footer_text_y=$((BOX_HEIGHT - 2))
-    cur_mov $footer_text_y 3
-    printf "${CYAN}Ethical Warning: Use these tools responsibly and only on systems you are authorized to test.${NC}\n"
-    
-    cur_mov $((footer_text_y + 1)) 3
-    printf "${DIM}Disclaimer: Tool status may not be 100%% accurate. Please verify manually. Created By 'PureHate'${NC}"
-
-    while true; do
-        read -n 1 -s -r -t 1 key
-        if [[ $key == "q" ]]; then
-            break
-        fi
-    done
     printf "\033[?25h"
 }
 
-# Function to display the results in a columnar format
 show_report() {
     local content_y=$1
+    local display_start_index=0
     
-    # Header
-    cur_mov $content_y 3
-    printf "${BOLD}${LIGHT_BLUE}%-22s %-18s %-10s %-30s %s${NC}\n" "Category" "Tool" "Status" "Install Command" "Link"
-    cur_mov $((content_y + 1)) 2
-    printf "${NEON_BLUE}"
-    for ((i=0; i<CONTENT_WIDTH; i++)); do printf "─"; done
-    printf "${NC}"
-    content_y=$((content_y + 2))
+    # --- Pager Loop ---
+    while true; do
+        # Clear the report area for redraw
+        for ((i=content_y; i < BOX_HEIGHT - 2; i++)); do
+            cur_mov $i 2
+            printf "%*s" $CONTENT_WIDTH ""
+        done
 
-    for tool_info in "${ALL_TOOLS_STATUS[@]}"; do
-        IFS=',' read -r category tool_name status <<< "$tool_info"
+        local current_y=$content_y
+
+        # --- Summary Header ---
+        local summary_line
+        summary_line=$(printf "${WHITE}Scan Summary: ${GREEN}%d Installed${WHITE}, ${RED}%d Missing${WHITE}, ${CYAN}%d Total${NC}" \
+                              "$INSTALLED_COUNT" "$MISSING_COUNT" "$TOTAL_COUNT")
+        local summary_x=$(( (CONTENT_WIDTH - ${#summary_line} + 19) / 2 )) # +19 for color codes
+        cur_mov $current_y $summary_x
+        echo -e "$summary_line"
+        current_y=$((current_y + 2))
+
+        # --- Single-Column Layout ---
+        local report_body_height=$((BOX_HEIGHT - content_y - 5))
+        local max_visible_items=$report_body_height
+
+        # --- Display Page of Tools ---
+        local items_to_display=("${ALL_TOOLS_STATUS[@]:display_start_index:max_visible_items}")
         
-        local install_cmd=${TOOL_COMMANDS[$tool_name]:-"N/A"}
-        local link=${TOOL_LINKS[$tool_name]:-"N/A"}
+        for tool_status in "${items_to_display[@]}"; do
+            IFS=',' read -r category tool status <<< "$tool_status"
 
-        local status_color="${RED}"
-        if [ "$status" == "INSTALLED" ]; then
-            status_color="${GREEN}"
+            cur_mov $current_y 3
+
+            if [ "$status" == "INSTALLED" ]; then
+                printf "${GREEN}[✓] %-20s ${PURPLE}(%s)${NC}" "$tool" "$category"
+            else
+                local install_cmd=${TOOL_COMMANDS[$tool]:-"N/A"}
+                printf "${RED}[✗] %-20s ${PURPLE}(%s) - ${YELLOW}%s${NC}" "$tool" "$category" "$install_cmd"
+            fi
+            current_y=$((current_y + 1))
+        done
+        
+        # --- Footer ---
+        local footer_y=$((BOX_HEIGHT - 2))
+        cur_mov $footer_y 2
+        printf "${RED}"
+        for ((i=0; i<CONTENT_WIDTH; i++)); do printf "─"; done
+        printf "${NC}"
+
+        local footer_text_y=$((BOX_HEIGHT - 1))
+        cur_mov $footer_text_y 3
+        printf "${CYAN}Ethical Warning: Use these tools responsibly and only on systems you are authorized to test. Created By 'PureHate'${NC}"
+
+        # --- Pager instructions ---
+        local pager_y=$((BOX_HEIGHT - 3))
+        cur_mov $pager_y 3
+        if (( ${#ALL_TOOLS_STATUS[@]} > max_visible_items )); then
+            printf "${WHITE}Use [w/s] to scroll, [q] to quit. Page %d/%d${NC}" \
+                   $((display_start_index / max_visible_items + 1)) \
+                   $(( (${#ALL_TOOLS_STATUS[@]} + max_visible_items - 1) / max_visible_items ))
+        else
+             printf "${WHITE}Press [q] to quit.${NC}"
         fi
 
-        cur_mov $content_y 3
-        printf "%-22s %-18s ${status_color}%-10s${NC} %-30s %s\n" "$category" "$tool_name" "$status" "$install_cmd" "$link"
-        content_y=$((content_y + 1))
-        
-        if (( content_y >= BOX_HEIGHT - 2 )); then
-            cur_mov $content_y 3
-            printf "${DIM}... and many more. Please expand your terminal for a full list.${NC}"
+        # --- Wait for user input ---
+        if [ -t 0 ]; then # Check if stdin is a terminal
+            read -rsn1 key
+        else # Not in a tty, so don't wait for input
             break
         fi
+        case "$key" in
+            q) break ;;
+            w) display_start_index=$((display_start_index - max_visible_items))
+               if (( display_start_index < 0 )); then display_start_index=0; fi
+               ;;
+            s) display_start_index=$((display_start_index + max_visible_items))
+               local max_index=$((${#ALL_TOOLS_STATUS[@]} - max_visible_items))
+               if (( display_start_index > max_index )); then display_start_index=$max_index; fi
+               if (( display_start_index < 0 )); then display_start_index=0; fi # handle case where there's less than one page
+               ;;
+        esac
     done
 }
+
 
 main
